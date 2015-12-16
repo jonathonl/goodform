@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 
   {
     goodform::variant var1, var2;
-    var1 = goodform::object{{"foo", "bar"}};
+    var1 = goodform::object{{"foo", "bar"},{"foo","baz"}};
     std::stringstream ss;
     goodform::json::serialize(var1, ss);
     goodform::json::deserialize(ss, var2);

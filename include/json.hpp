@@ -1,4 +1,4 @@
-#pragma 1
+#pragma once
 #ifndef GOODFORM_JSON_HPP
 #define GOODFORM_JSON_HPP
 

@@ -219,7 +219,7 @@ namespace goodform
               strip_white_space(input);
 
               variant value;
-              parseError = deserialize(input, value);
+              parseError = !deserialize(input, value);
               v[key] = std::move(value);
 
               if (!parseError)
@@ -257,7 +257,7 @@ namespace goodform
         else
         {
           variant elem;
-          parseError = deserialize(input, elem);
+          parseError = !deserialize(input, elem);
           v.push(std::move(elem));
           if (!parseError)
           {
@@ -309,11 +309,17 @@ namespace goodform
             uniChar = uniChar << 8; // was << 4
 
             uniChar |= (unsigned char)convert_hex_to_dec(uniArray[3]);
-
+#ifdef _MSC_VER
+            std::basic_string<__int32, std::char_traits<__int32>> utf32String;
+#else
             std::u32string utf32String;
+#endif
             utf32String.push_back(uniChar);
+#ifdef _MSC_VER
+            std::wstring_convert<std::codecvt_utf8<__int32>, __int32> convert;
+#else
             std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert;
-
+#endif
             destination += convert.to_bytes(utf32String);
           }
         }
