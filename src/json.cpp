@@ -131,7 +131,6 @@ namespace goodform
   //----------------------------------------------------------------------//
   void json::strip_white_space(std::istream& input)
   {
-    std::string comment;
     for (char c = (char)input.peek();
       c == ' '
       || c == '\t'
@@ -145,7 +144,10 @@ namespace goodform
         if (input.peek() != '/')
           input.unget();
         else
+        {
+          std::string comment;
           std::getline(input, comment);
+        }
       }
     }
   }

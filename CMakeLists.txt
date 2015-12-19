@@ -11,6 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #set(CMAKE_CC_COMPILER "/opt/local/bin/gcc-mp-4.9")
 
 set(HEADER_FILES
+  include/form.hpp
   include/variant.hpp
   include/msgpack.hpp
   include/json.hpp)
