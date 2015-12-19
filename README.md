@@ -14,7 +14,6 @@ s << "{" << std::endl
   << "}" << std::endl;
   
 json::deserialize(ss, var);
-fn(var);
 form f(var);
 
 struct
