@@ -98,8 +98,6 @@ namespace goodform
       array array_;
       object object_;
       data_union(){}
-      data_union(const data_union&){}
-      data_union& operator=(const data_union&) { return (*this); }
       ~data_union(){}
     };
 

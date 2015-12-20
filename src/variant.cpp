@@ -365,12 +365,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(bool value)
   {
-    if (this->type_ != variant_type::boolean)
-    {
-      this->destroy();
-      this->type_ = variant_type::boolean;
-    }
-    this->data_.boolean_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -378,12 +373,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::int8_t value)
   {
-    if (this->type_ != variant_type::int8)
-    {
-      this->destroy();
-      this->type_ = variant_type::int8;
-    }
-    this->data_.int8_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -391,12 +381,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::int16_t value)
   {
-    if (this->type_ != variant_type::int16)
-    {
-      this->destroy();
-      this->type_ = variant_type::int16;
-    }
-    this->data_.int16_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -404,12 +389,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::int32_t value)
   {
-    if (this->type_ != variant_type::int32)
-    {
-      this->destroy();
-      this->type_ = variant_type::int32;
-    }
-    this->data_.int32_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -417,12 +397,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::int64_t value)
   {
-    if (this->type_ != variant_type::int64)
-    {
-      this->destroy();
-      this->type_ = variant_type::int64;
-    }
-    this->data_.int64_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -430,12 +405,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::uint8_t value)
   {
-    if (this->type_ != variant_type::uint8)
-    {
-      this->destroy();
-      this->type_ = variant_type::uint8;
-    }
-    this->data_.uint8_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -443,12 +413,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::uint16_t value)
   {
-    if (this->type_ != variant_type::uint16)
-    {
-      this->destroy();
-      this->type_ = variant_type::uint16;
-    }
-    this->data_.uint16_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -456,12 +421,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::uint32_t value)
   {
-    if (this->type_ != variant_type::uint32)
-    {
-      this->destroy();
-      this->type_ = variant_type::uint32;
-    }
-    this->data_.uint32_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -469,12 +429,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::uint64_t value)
   {
-    if (this->type_ != variant_type::uint64)
-    {
-      this->destroy();
-      this->type_ = variant_type::uint64;
-    }
-    this->data_.uint64_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -482,12 +437,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(float value)
   {
-    if (this->type_ != variant_type::float32)
-    {
-      this->destroy();
-      this->type_ = variant_type::float32;
-    }
-    this->data_.float32_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -495,12 +445,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(double value)
   {
-    if (this->type_ != variant_type::float64)
-    {
-      this->destroy();
-      this->type_ = variant_type::float64;
-    }
-    this->data_.float64_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -508,14 +453,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(const char* value)
   {
-    if (this->type_ != variant_type::string)
-    {
-      this->destroy();
-      this->type_ = variant_type::string;
-      new (&this->data_.string_) std::string(value);
-    }
-    else
-      this->data_.string_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -523,14 +461,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(std::string&& value)
   {
-    if (this->type_ != variant_type::string)
-    {
-      this->destroy();
-      this->type_ = variant_type::string;
-      new (&this->data_.string_) std::string(std::move(value));
-    }
-    else
-      this->data_.string_ = std::move(value);
+    operator=(variant(std::move(value)));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -538,14 +469,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(goodform::binary&& value)
   {
-    if (this->type_ != variant_type::binary)
-    {
-      this->destroy();
-      this->type_ = variant_type::binary;
-      new (&this->data_.binary_) goodform::binary(std::move(value));
-    }
-    else
-      this->data_.binary_ = std::move(value);
+    operator=(variant(std::move(value)));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -553,14 +477,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(goodform::array&& value)
   {
-    if (this->type_ != variant_type::array)
-    {
-      this->destroy();
-      this->type_ = variant_type::array;
-      new (&this->data_.array_) goodform::array(std::move(value));
-    }
-    else
-      this->data_.array_ = std::move(value);
+    operator=(variant(std::move(value)));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -568,14 +485,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(goodform::object&& value)
   {
-    if (this->type_ != variant_type::object)
-    {
-      this->destroy();
-      this->type_ = variant_type::object;
-      new (&this->data_.object_) goodform::object(std::move(value));
-    }
-    else
-      this->data_.object_ = std::move(value);
+    operator=(variant(std::move(value)));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -583,14 +493,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(const std::string& value)
   {
-    if (this->type_ != variant_type::string)
-    {
-      this->destroy();
-      this->type_ = variant_type::string;
-      new (&this->data_.string_) std::string(value);
-    }
-    else
-      this->data_.string_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -598,14 +501,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(const binary& value)
   {
-    if (this->type_ != variant_type::binary)
-    {
-      this->destroy();
-      this->type_ = variant_type::binary;
-      new (&this->data_.binary_) goodform::binary(value);
-    }
-    else
-      this->data_.binary_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -613,14 +509,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(const array& value)
   {
-    if (this->type_ != variant_type::array)
-    {
-      this->destroy();
-      this->type_ = variant_type::array;
-      new (&this->data_.array_) goodform::array(value);
-    }
-    else
-      this->data_.array_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -628,14 +517,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(const object& value)
   {
-    if (this->type_ != variant_type::object)
-    {
-      this->destroy();
-      this->type_ = variant_type::object;
-      new (&this->data_.object_) goodform::object(value);
-    }
-    else
-      this->data_.object_ = value;
+    operator=(variant(value));
     return *this;
   }
   //----------------------------------------------------------------------//
@@ -643,7 +525,7 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant& variant::operator=(variant_type type)
   {
-    this->type(type);
+    operator=(variant(type));
     return *this;
   }
   //----------------------------------------------------------------------//
