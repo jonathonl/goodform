@@ -78,7 +78,7 @@ namespace goodform
     sub_form at(size_t index);
     sub_form at(size_t index, const error_message& customerror_message);
     sub_form at(size_t index, const variant& default_variant);
-    void for_each(const std::function<void(const sub_form& element, size_t index)>& fn);
+    void for_each(const std::function<void(sub_form& element, size_t index)>& fn);
 
     const std::vector<variant>& val() const;
   };
@@ -309,11 +309,12 @@ namespace goodform
     return ret;
   }
 
-  void array_validator::for_each(const std::function<void(const sub_form& element, size_t index)>& fn)
+  void array_validator::for_each(const std::function<void(sub_form& element, size_t index)>& fn)
   {
     for (size_t i = 0; i < this->value_.size(); ++i)
     {
-      fn(sub_form(this->value_[i], this->error_), i);
+      sub_form tmp(this->value_[i], this->error_);
+      fn(tmp, i);
     }
   }
 
@@ -518,7 +519,7 @@ namespace goodform
 
   string_validator sub_form::string()
   {
-    return this->string("TYPE NOT STRING");
+    return this->string(error_message("TYPE NOT STRING"));
   }
 
   string_validator sub_form::string(const error_message& customerror_message)
