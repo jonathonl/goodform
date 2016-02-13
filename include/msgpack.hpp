@@ -14,6 +14,18 @@ namespace goodform
   class msgpack
   {
   private:
+    union numeric_union32
+    {
+      float f;
+      std::uint32_t i;
+    };
+
+    union numeric_union64
+    {
+      double f;
+      std::uint64_t i;
+    };
+
     msgpack() = delete;
     //static bool deserializeobject();
 
