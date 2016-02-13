@@ -5,27 +5,27 @@
 namespace goodform
 {
   //----------------------------------------------------------------------//
-  const variant variant::null_variant = goodform::variant(nullptr);
+  const variant null_variant = goodform::variant(nullptr);
 
-  const std::nullptr_t variant::const_null = nullptr;
-  const bool variant::const_bool = false;
+  const std::nullptr_t const_null = nullptr;
+  const bool const_bool = false;
 
-  const std::int8_t   variant::const_int8   = 0;
-  const std::int16_t  variant::const_int16  = 0;
-  const std::int32_t  variant::const_int32  = 0;
-  const std::int64_t  variant::const_int64  = 0;
-  const std::uint8_t  variant::const_uint8  = 0;
-  const std::uint16_t variant::const_uint16 = 0;
-  const std::uint32_t variant::const_uint32 = 0;
-  const std::uint64_t variant::const_uint64 = 0;
+  const std::int8_t   const_int8   = 0;
+  const std::int16_t  const_int16  = 0;
+  const std::int32_t  const_int32  = 0;
+  const std::int64_t  const_int64  = 0;
+  const std::uint8_t  const_uint8  = 0;
+  const std::uint16_t const_uint16 = 0;
+  const std::uint32_t const_uint32 = 0;
+  const std::uint64_t const_uint64 = 0;
 
-  const float variant::const_float   = 0.0;
-  const double variant::const_double = 0.0;
+  const float const_float  = 0.0;
+  const double const_double = 0.0;
 
-  const std::string variant::const_string;
-  const binary variant::const_binary;
-  const array variant::const_array;
-  const object variant::const_object;
+  const std::string const_string;
+  const binary const_binary;
+  const array const_array;
+  const object const_object;
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
@@ -612,7 +612,7 @@ namespace goodform
 
   //----------------------------------------------------------------------//
   template<>
-  const std::nullptr_t& variant::get<std::nullptr_t>() const { return variant::const_null; }
+  const std::nullptr_t& variant::get<std::nullptr_t>() const { return const_null; }
   template<>
   const bool& variant::get<bool>() const { return this->get_boolean(); }
   template<>
@@ -895,7 +895,7 @@ namespace goodform
     if (this->type_ == variant_type::array && index < this->data_.array_.size())
       return this->data_.array_[index];
     else
-      return variant::null_variant;
+      return null_variant;
   }
   //----------------------------------------------------------------------//
 
@@ -903,14 +903,14 @@ namespace goodform
   const variant& variant::operator[](const std::string& index) const
   {
     if (this->type_ != variant_type::object)
-      return variant::null_variant;
+      return null_variant;
     else
     {
       auto it =  this->data_.object_.find(index);
       if (it != this->data_.object_.end())
         return it->second;
       else
-        return variant::null_variant;
+        return null_variant;
     }
   }
   //----------------------------------------------------------------------//

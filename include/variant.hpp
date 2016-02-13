@@ -51,31 +51,6 @@ namespace goodform
   {
   private:
     //----------------------------------------------------------------------//
-    static const variant null_variant;
-    static const std::nullptr_t const_null;
-
-    static const bool const_bool;
-
-    static const std::int8_t  const_int8;
-    static const std::int16_t const_int16;
-    static const std::int32_t const_int32;
-    static const std::int64_t const_int64;
-
-    static const std::uint8_t  const_uint8;
-    static const std::uint16_t const_uint16;
-    static const std::uint32_t const_uint32;
-    static const std::uint64_t const_uint64;
-
-    static const float const_float;
-    static const double const_double;
-
-    static const std::string const_string;
-    static const binary const_binary;
-    static const array const_array;
-    static const object const_object;
-    //----------------------------------------------------------------------//
-  private:
-    //----------------------------------------------------------------------//
     union data_union
     {
       bool boolean_;
