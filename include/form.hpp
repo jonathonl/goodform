@@ -142,6 +142,12 @@ namespace goodform
     array_validator array(const std::vector<variant>& default_value);
     object_validator object();
     object_validator object(const std::map<std::string, variant>& default_value);
+    // Array shortcuts:
+    sub_form at(size_t index);
+    sub_form at(size_t index, const variant& default_variant);
+    // Object shortcuts:
+    sub_form at(const std::string& key);
+    sub_form at(const std::string& key, const variant& default_variant);
 
 //    boolean_validator b() { return this->boolean(); }
 //    boolean_validator b(const error_message& customerror_message) { return this->boolean(customerror_message); }
@@ -705,6 +711,26 @@ namespace goodform
   {
     object_validator ret(this->variant_.is<goodform::object>() ? this->variant_.get<goodform::object>() : default_value, this->error_);
     return ret;
+  }
+
+  sub_form sub_form::at(size_t index)
+  {
+    return this->array().at(index);
+  }
+
+  sub_form sub_form::at(size_t index, const variant& default_variant)
+  {
+    return this->array().at(index, default_variant);
+  }
+
+  sub_form sub_form::at(const std::string& key)
+  {
+    return this->object().at(key);
+  }
+
+  sub_form sub_form::at(const std::string& key, const variant& default_variant)
+  {
+    return this->object().at(key, default_variant);
   }
   //======================================================================//
 

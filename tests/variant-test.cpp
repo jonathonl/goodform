@@ -89,26 +89,26 @@ int main(int argc, char** argv)
       object obj;
     } form_data;
 
-    form_data.boolean = f.object().at("boolean").boolean().val();
-    form_data.ui8 = f.object().at("ui8").uint8().val();
-    form_data.i8 = f.object().at("i8").int8().val();
+    form_data.boolean = f.at("boolean").boolean().val();
+    form_data.ui8 = f.at("ui8").uint8().val();
+    form_data.i8 = f.at("i8").int8().val();
     
-    form_data.ui16 = f.object().at("ui16").uint16().val();
-    form_data.i16 = f.object().at("i16").int16().val();
+    form_data.ui16 = f.at("ui16").uint16().val();
+    form_data.i16 = f.at("i16").int16().val();
 
-    form_data.ui32 = f.object().at("ui32").uint32().val();
-    form_data.i32 = f.object().at("i32").int32().val();
+    form_data.ui32 = f.at("ui32").uint32().val();
+    form_data.i32 = f.at("i32").int32().val();
 
-    form_data.ui64 = f.object().at("ui64").uint64().val();
-    form_data.i64 = f.object().at("i64").int64().val();
+    form_data.ui64 = f.at("ui64").uint64().val();
+    form_data.i64 = f.at("i64").int64().val();
 
-    form_data.real = f.object().at("real").float32().val();
-    form_data.dreal = f.object().at("dreal").float64().gte(10).lt(11).val();
+    form_data.real = f.at("real").float32().val();
+    form_data.dreal = f.at("dreal").float64().gt(10).lt(11).val();
     
-    form_data.str = f.object().at("str").string().match(std::regex("^a.*$")).val();
-    f.object().at("bin");
+    form_data.str = f.at("str").string().match(std::regex("^a.*$")).val();
+    f.at("bin");
 
-    f.object().at("arr").array().for_each([&form_data](sub_form& sf, std::size_t i)
+    f.at("arr").array().for_each([&form_data](sub_form& sf, std::size_t i)
     {
       form_data.arr.push_back(sf.string().val());
     });
