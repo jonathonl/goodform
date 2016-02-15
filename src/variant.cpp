@@ -4,28 +4,36 @@
 //######################################################################//
 namespace goodform
 {
+//  //----------------------------------------------------------------------//
+//  template<typename T>
+//  typename std::enable_if<std::is_integral<T>::value && std::is_signed<T>::value,T>::type
+//  signed_cast(typename std::make_unsigned<T>::type v) {
+//    T s;
+//    std::memcpy(&s,&v,sizeof v);
+//    return s;
+//  }
+//
+//  template<typename T>
+//  typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value,T>::type
+//  signed_cast(typename std::make_signed<T>::type v) {
+//    T s;
+//    std::memcpy(&s,&v,sizeof v);
+//    return s;
+//  }
+//  //----------------------------------------------------------------------//
+
   //----------------------------------------------------------------------//
-  const variant null_variant = goodform::variant(nullptr);
+  const variant variant::null_variant = goodform::variant(nullptr);
 
-  const std::nullptr_t const_null = nullptr;
-  const bool const_bool = false;
-
-  const std::int8_t   const_int8   = 0;
-  const std::int16_t  const_int16  = 0;
-  const std::int32_t  const_int32  = 0;
-  const std::int64_t  const_int64  = 0;
-  const std::uint8_t  const_uint8  = 0;
-  const std::uint16_t const_uint16 = 0;
-  const std::uint32_t const_uint32 = 0;
-  const std::uint64_t const_uint64 = 0;
-
-  const float const_float  = 0.0;
-  const double const_double = 0.0;
-
-  const std::string const_string;
-  const binary const_binary;
-  const array const_array;
-  const object const_object;
+  const std::nullptr_t variant::const_null = nullptr;
+  const bool variant::const_bool = false;
+  const std::int64_t  variant::const_int64  = 0;
+  const std::uint64_t variant::const_uint64 = 0;
+  const double variant::const_double = 0.0;
+  const std::string variant::const_string;
+  const binary variant::const_binary;
+  const array variant::const_array;
+  const object variant::const_object;
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
@@ -49,26 +57,32 @@ namespace goodform
 
     if (this->type_ == variant_type::boolean)
       this->data_.boolean_ = source.data_.boolean_;
-    else if (this->type_ == variant_type::int8)
-      this->data_.int8_ = source.data_.int8_;
-    else if (this->type_ == variant_type::int16)
-      this->data_.int16_ = source.data_.int16_;
-    else if (this->type_ == variant_type::int32)
-      this->data_.int32_ = source.data_.int32_;
-    else if (this->type_ == variant_type::int64)
-      this->data_.int64_ = source.data_.int64_;
-    else if (this->type_ == variant_type::uint8)
-      this->data_.uint8_ = source.data_.uint8_;
-    else if (this->type_ == variant_type::uint16)
-      this->data_.uint16_ = source.data_.uint16_;
-    else if (this->type_ == variant_type::uint32)
-      this->data_.uint32_ = source.data_.uint32_;
-    else if (this->type_ == variant_type::uint64)
-      this->data_.uint64_ = source.data_.uint64_;
-    else if (this->type_ == variant_type::float32)
-      this->data_.float32_ = source.data_.float32_;
-    else if (this->type_ == variant_type::float64)
-      this->data_.float64_ = source.data_.float64_;
+    //else if (this->type_ == variant_type::int8)
+    //  this->data_.int8_ = source.data_.int8_;
+    //else if (this->type_ == variant_type::int16)
+    //  this->data_.int16_ = source.data_.int16_;
+    //else if (this->type_ == variant_type::int32)
+    //  this->data_.int32_ = source.data_.int32_;
+    //else if (this->type_ == variant_type::int64)
+    //  this->data_.int64_ = source.data_.int64_;
+    //else if (this->type_ == variant_type::uint8)
+    //  this->data_.uint8_ = source.data_.uint8_;
+    //else if (this->type_ == variant_type::uint16)
+    //  this->data_.uint16_ = source.data_.uint16_;
+    //else if (this->type_ == variant_type::uint32)
+    //  this->data_.uint32_ = source.data_.uint32_;
+    //else if (this->type_ == variant_type::uint64)
+    //  this->data_.uint64_ = source.data_.uint64_;
+    //else if (this->type_ == variant_type::float32)
+    //  this->data_.float32_ = source.data_.float32_;
+    //else if (this->type_ == variant_type::float64)
+    //  this->data_.float64_ = source.data_.float64_;
+    else if (this->type_ == variant_type::signed_integer)
+      this->data_.signed_integer_ = source.data_.signed_integer_;
+    else if (this->type_ == variant_type::unsigned_integer)
+      this->data_.unsigned_integer_ = source.data_.unsigned_integer_;
+    else if (this->type_ == variant_type::floating_point)
+      this->data_.floating_point_ = source.data_.floating_point_;
     else if (this->type_ == variant_type::string)
       new(&this->data_.string_) std::string(std::move(source.data_.string_));
     else if (this->type_ == variant_type::binary)
@@ -87,26 +101,32 @@ namespace goodform
 
     if (this->type_ == variant_type::boolean)
       this->data_.boolean_ = source.data_.boolean_;
-    else if (this->type_ == variant_type::int8)
-      this->data_.int8_ = source.data_.int8_;
-    else if (this->type_ == variant_type::int16)
-      this->data_.int16_ = source.data_.int16_;
-    else if (this->type_ == variant_type::int32)
-      this->data_.int32_ = source.data_.int32_;
-    else if (this->type_ == variant_type::int64)
-      this->data_.int64_ = source.data_.int64_;
-    else if (this->type_ == variant_type::uint8)
-      this->data_.uint8_ = source.data_.uint8_;
-    else if (this->type_ == variant_type::uint16)
-      this->data_.uint16_ = source.data_.uint16_;
-    else if (this->type_ == variant_type::uint32)
-      this->data_.uint32_ = source.data_.uint32_;
-    else if (this->type_ == variant_type::uint64)
-      this->data_.uint64_ = source.data_.uint64_;
-    else if (this->type_ == variant_type::float32)
-      this->data_.float32_ = source.data_.float32_;
-    else if (this->type_ == variant_type::float64)
-      this->data_.float64_ = source.data_.float64_;
+    //else if (this->type_ == variant_type::int8)
+    //  this->data_.int8_ = source.data_.int8_;
+    //else if (this->type_ == variant_type::int16)
+    //  this->data_.int16_ = source.data_.int16_;
+    //else if (this->type_ == variant_type::int32)
+    //  this->data_.int32_ = source.data_.int32_;
+    //else if (this->type_ == variant_type::int64)
+    //  this->data_.int64_ = source.data_.int64_;
+    //else if (this->type_ == variant_type::uint8)
+    //  this->data_.uint8_ = source.data_.uint8_;
+    //else if (this->type_ == variant_type::uint16)
+    //  this->data_.uint16_ = source.data_.uint16_;
+    //else if (this->type_ == variant_type::uint32)
+    //  this->data_.uint32_ = source.data_.uint32_;
+    //else if (this->type_ == variant_type::uint64)
+    //  this->data_.uint64_ = source.data_.uint64_;
+    //else if (this->type_ == variant_type::float32)
+    //  this->data_.float32_ = source.data_.float32_;
+    //else if (this->type_ == variant_type::float64)
+    //  this->data_.float64_ = source.data_.float64_;
+    else if (this->type_ == variant_type::signed_integer)
+      this->data_.signed_integer_ = source.data_.signed_integer_;
+    else if (this->type_ == variant_type::unsigned_integer)
+      this->data_.unsigned_integer_ = source.data_.unsigned_integer_;
+    else if (this->type_ == variant_type::floating_point)
+      this->data_.floating_point_ = source.data_.floating_point_;
     else if (this->type_ == variant_type::string)
       new(&this->data_.string_) std::string(source.data_.string_);
     else if (this->type_ == variant_type::binary)
@@ -181,80 +201,80 @@ namespace goodform
   //----------------------------------------------------------------------//
   variant::variant(std::int8_t value)
   {
-    this->type_ = variant_type::int8;
-    this->data_.int8_ = value;
+    this->type_ = variant_type::signed_integer;
+    this->data_.signed_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::int16_t value)
   {
-    this->type_ = variant_type::int16;
-    this->data_.int16_ = value;
+    this->type_ = variant_type::signed_integer;
+    this->data_.signed_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::int32_t value)
   {
-    this->type_ = variant_type::int32;
-    this->data_.int32_ = value;
+    this->type_ = variant_type::signed_integer;
+    this->data_.signed_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::int64_t value)
   {
-    this->type_ = variant_type::int64;
-    this->data_.int64_ = value;
+    this->type_ = variant_type::signed_integer;
+    this->data_.signed_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::uint8_t value)
   {
-    this->type_ = variant_type::uint8;
-    this->data_.uint8_ = value;
+    this->type_ = variant_type::unsigned_integer;
+    this->data_.unsigned_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::uint16_t value)
   {
-    this->type_ = variant_type::uint16;
-    this->data_.uint16_ = value;
+    this->type_ = variant_type::unsigned_integer;
+    this->data_.unsigned_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::uint32_t value)
   {
-    this->type_ = variant_type::uint32;
-    this->data_.uint32_ = value;
+    this->type_ = variant_type::unsigned_integer;
+    this->data_.unsigned_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(std::uint64_t value)
   {
-    this->type_ = variant_type::uint64;
-    this->data_.uint64_ = value;
+    this->type_ = variant_type::unsigned_integer;
+    this->data_.unsigned_integer_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(float value)
   {
-    this->type_ = variant_type::float32;
-    this->data_.float32_ = value;
+    this->type_ = variant_type::floating_point;
+    this->data_.floating_point_ = value;
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   variant::variant(double value)
   {
-    this->type_ = variant_type::float64;
-    this->data_.float64_ = value;
+    this->type_ = variant_type::floating_point;
+    this->data_.floating_point_ = value;
   }
   //----------------------------------------------------------------------//
 
@@ -558,306 +578,186 @@ namespace goodform
 
   //----------------------------------------------------------------------//
   template<>
-  bool variant::is<std::nullptr_t>() const { return this->is_null(); }
+  bool variant::is<std::nullptr_t>() const { return (this->type_ == variant_type::null); }
   template<>
-  bool variant::is<bool>() const { return this->is_boolean(); }
+  bool variant::is<bool>() const { return (this->type_ == variant_type::boolean); }
   template<>
-  bool variant::is<std::int8_t>() const { return this->is_int8(); }
+  bool variant::is<std::int64_t>() const { return (this->type_ == variant_type::signed_integer); }
   template<>
-  bool variant::is<std::int16_t>() const { return this->is_int16(); }
+  bool variant::is<std::uint64_t>() const { return (this->type_ == variant_type::unsigned_integer); }
   template<>
-  bool variant::is<std::int32_t>() const { return this->is_int32(); }
+  bool variant::is<double>() const { return (this->type_ == variant_type::floating_point); }
   template<>
-  bool variant::is<std::int64_t>() const { return this->is_int64(); }
+  bool variant::is<std::string>() const { return (this->type_ == variant_type::string); }
   template<>
-  bool variant::is<std::uint8_t>() const { return this->is_uint8(); }
+  bool variant::is<goodform::binary>() const { return (this->type_ == variant_type::binary); }
   template<>
-  bool variant::is<std::uint16_t>() const { return this->is_uint16(); }
+  bool variant::is<goodform::array>() const { return (this->type_ == variant_type::array); }
   template<>
-  bool variant::is<std::uint32_t>() const { return this->is_uint32(); }
-  template<>
-  bool variant::is<std::uint64_t>() const { return this->is_uint64(); }
-  template<>
-  bool variant::is<float>() const { return this->is_float32(); }
-  template<>
-  bool variant::is<double>() const { return this->is_float64(); }
-  template<>
-  bool variant::is<std::string>() const { return this->is_string(); }
-  template<>
-  bool variant::is<goodform::binary>() const { return this->is_binary(); }
-  template<>
-  bool variant::is<goodform::array>() const { return this->is_array(); }
-  template<>
-  bool variant::is<goodform::object>() const { return this->is_object(); }
+  bool variant::is<goodform::object>() const { return (this->type_ == variant_type::object);  }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  bool variant::is_null()    const { return (this->type_ == variant_type::null);    }
-  bool variant::is_boolean() const { return (this->type_ == variant_type::boolean); }
-  bool variant::is_int8()    const { return (this->type_ == variant_type::int8);    }
-  bool variant::is_int16()   const { return (this->type_ == variant_type::int16);   }
-  bool variant::is_int32()   const { return (this->type_ == variant_type::int32);   }
-  bool variant::is_int64()   const { return (this->type_ == variant_type::int64);   }
-  bool variant::is_uint8()   const { return (this->type_ == variant_type::uint8);   }
-  bool variant::is_uint16()  const { return (this->type_ == variant_type::uint16);  }
-  bool variant::is_uint32()  const { return (this->type_ == variant_type::uint32);  }
-  bool variant::is_uint64()  const { return (this->type_ == variant_type::uint64);  }
-  bool variant::is_float32() const { return (this->type_ == variant_type::float32); }
-  bool variant::is_float64() const { return (this->type_ == variant_type::float64); }
-  bool variant::is_string()  const { return (this->type_ == variant_type::string);  }
-  bool variant::is_binary()  const { return (this->type_ == variant_type::binary);  }
-  bool variant::is_array()   const { return (this->type_ == variant_type::array);   }
-  bool variant::is_object()  const { return (this->type_ == variant_type::object);  }
+  template<typename T>
+  bool variant::can_be() const
+  {
+    return (this->type() == variant_type::signed_integer && this->data_.signed_integer_ >= std::numeric_limits<T>::min() && this->data_.signed_integer_ <= std::numeric_limits<T>::max())
+      || (this->type() == variant_type::unsigned_integer && this->data_.unsigned_integer_ <= std::numeric_limits<T>::max());
+  }
+  template bool variant::can_be<std::int8_t>() const;
+  template bool variant::can_be<std::int16_t>() const;
+  template bool variant::can_be<std::int32_t>() const;
+  template bool variant::can_be<std::int64_t>() const;
+  template bool variant::can_be<std::uint8_t>() const;
+  template bool variant::can_be<std::uint16_t>() const;
+  template bool variant::can_be<std::uint32_t>() const;
+  template bool variant::can_be<std::uint64_t>() const;
+  template<> bool variant::can_be<float>() const
+  {
+    return (this->type() == variant_type::floating_point && this->data_.floating_point_ >= std::numeric_limits<float>::min() && this->data_.floating_point_ <= std::numeric_limits<float>::max()) //&& this->data_.floating_point_ == static_cast<float>(this->data_.floating_point_))
+      || (this->type() == variant_type::signed_integer && this->data_.signed_integer_ >= std::numeric_limits<float>::min() && this->data_.signed_integer_ <= std::numeric_limits<float>::max())
+      || (this->type() == variant_type::unsigned_integer && this->data_.unsigned_integer_ <= std::numeric_limits<float>::max());
+  }
+  template<> bool variant::can_be<double>() const
+  {
+    return (this->type() == variant_type::floating_point)
+      || (this->type() == variant_type::signed_integer && this->data_.signed_integer_ >= std::numeric_limits<double>::min() && this->data_.signed_integer_ <= std::numeric_limits<double>::max())
+      || (this->type() == variant_type::unsigned_integer && this->data_.unsigned_integer_ <= std::numeric_limits<double>::max());
+  }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
   template<>
   const std::nullptr_t& variant::get<std::nullptr_t>() const { return const_null; }
   template<>
-  const bool& variant::get<bool>() const { return this->get_boolean(); }
+  const bool& variant::get<bool>() const
+  {
+    return (this->type_ == variant_type::boolean ? this->data_.boolean_ : const_bool);
+  }
   template<>
-  const std::int8_t& variant::get<std::int8_t>() const { return this->get_int8(); }
+  const std::int64_t& variant::get<std::int64_t>() const
+  {
+    return (this->type_ == variant_type::signed_integer ?  this->data_.signed_integer_ : const_int64);
+  }
   template<>
-  const std::int16_t& variant::get<std::int16_t>() const { return this->get_int16(); }
+  const std::uint64_t& variant::get<std::uint64_t>() const
+  {
+    return (this->type_ == variant_type::unsigned_integer ? this->data_.unsigned_integer_ : const_uint64);
+  }
   template<>
-  const std::int32_t& variant::get<std::int32_t>() const { return this->get_int32(); }
+  const double& variant::get<double>() const
+  {
+    return (this->type_ == variant_type::floating_point ? this->data_.floating_point_ : const_double);
+  }
   template<>
-  const std::int64_t& variant::get<std::int64_t>() const { return this->get_int64(); }
+  const std::string& variant::get<std::string>() const
+  {
+    return (this->type_ == variant_type::string ? this->data_.string_ : const_string);
+  }
   template<>
-  const std::uint8_t& variant::get<std::uint8_t>() const { return this->get_uint8(); }
+  const goodform::binary& variant::get<goodform::binary>() const
+  {
+    return (this->type_ == variant_type::binary ? this->data_.binary_ : const_binary);
+  }
   template<>
-  const std::uint16_t& variant::get<std::uint16_t>() const { return this->get_uint16(); }
+  const goodform::array& variant::get<goodform::array>() const
+  {
+    return (this->type_ == variant_type::array ? this->data_.array_ : const_array);
+  }
   template<>
-  const std::uint32_t& variant::get<std::uint32_t>() const { return this->get_uint32(); }
-  template<>
-  const std::uint64_t& variant::get<std::uint64_t>() const { return this->get_uint64(); }
-  template<>
-  const float& variant::get<float>() const { return this->get_float32(); }
-  template<>
-  const double& variant::get<double>() const { return this->get_float64(); }
-  template<>
-  const std::string& variant::get<std::string>() const { return this->get_string(); }
-  template<>
-  const goodform::binary& variant::get<goodform::binary>() const { return this->get_binary(); }
-  template<>
-  const goodform::array& variant::get<goodform::array>() const { return this->get_array(); }
-  template<>
-  const goodform::object& variant::get<goodform::object>() const { return this->get_object(); }
+  const goodform::object& variant::get<goodform::object>() const
+  {
+    return (this->type_ == variant_type::object ? this->data_.object_ : const_object);
+  }
   //----------------------------------------------------------------------//
 
-
   //----------------------------------------------------------------------//
+  template<typename T>
+  bool variant::get(T& dest) const
+  {
+    bool ret =  this->can_be<T>();
+
+    if (ret)
+    {
+      if (this->type() == variant_type::signed_integer)
+        ret = static_cast<T>(this->data_.signed_integer_);
+      else
+        ret = static_cast<T>(this->data_.unsigned_integer_);
+    }
+
+    return ret;
+  }
+
+  template bool variant::get<std::int8_t>(std::int8_t& dest) const;
+  template bool variant::get<std::int16_t>(std::int16_t& dest) const;
+  template bool variant::get<std::int32_t>(std::int32_t& dest) const;
+  template bool variant::get<std::int64_t>(std::int64_t& dest) const;
+  template bool variant::get<std::uint8_t>(std::uint8_t& dest) const;
+  template bool variant::get<std::uint16_t>(std::uint16_t& dest) const;
+  template bool variant::get<std::uint32_t>(std::uint32_t& dest) const;
+  template bool variant::get<std::uint64_t>(std::uint64_t& dest) const;
+
   template<>
   bool variant::get(bool& dest) const
   {
     bool ret = (this->type_ == variant_type::boolean);
     if (ret)
-      dest = this->get_boolean();
+      dest = this->data_.boolean_;
     return ret;
   }
-  //----------------------------------------------------------------------//
 
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::int8_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::int8);
-    if (ret)
-      dest = this->get_int8();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::int16_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::int16);
-    if (ret)
-      dest = this->get_int16();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::int32_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::int32);
-    if (ret)
-      dest = this->get_int32();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::int64_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::int64);
-    if (ret)
-      dest = this->get_int64();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::uint8_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::uint8);
-    if (ret)
-      dest = this->get_uint8();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::uint16_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::uint16);
-    if (ret)
-      dest = this->get_uint16();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::uint32_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::uint32);
-    if (ret)
-      dest = this->get_uint32();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  template<>
-  bool variant::get(std::uint64_t& dest) const
-  {
-    bool ret = (this->type_ == variant_type::uint64);
-    if (ret)
-      dest = this->get_uint64();
-    return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
   template<>
   bool variant::get(float& dest) const
   {
-    bool ret = (this->type_ == variant_type::float32);
+    bool ret = this->can_be<float>();
     if (ret)
-      dest = this->get_float32();
+      dest = static_cast<float>(this->data_.floating_point_);
     return ret;
   }
-  //----------------------------------------------------------------------//
 
-  //----------------------------------------------------------------------//
   template<>
   bool variant::get(double& dest) const
   {
-    bool ret = (this->type_ == variant_type::float64);
+    bool ret = this->type() == variant_type::floating_point;
     if (ret)
-      dest = this->get_float64();
+      dest = this->data_.floating_point_;
     return ret;
   }
-  //----------------------------------------------------------------------//
 
-  //----------------------------------------------------------------------//
   template<>
   bool variant::get(std::string& dest) const
   {
     bool ret = (this->type_ == variant_type::string);
     if (ret)
-      dest = this->get_string();
+      dest = this->data_.string_;
     return ret;
   }
-  //----------------------------------------------------------------------//
 
-  //----------------------------------------------------------------------//
   template<>
   bool variant::get(goodform::binary& dest) const
   {
     bool ret = (this->type_ == variant_type::binary);
     if (ret)
-      dest = this->get_binary();
+      dest = this->data_.binary_;
     return ret;
   }
-  //----------------------------------------------------------------------//
 
-  //----------------------------------------------------------------------//
   template<>
   bool variant::get(goodform::array& dest) const
   {
     bool ret = (this->type_ == variant_type::array);
     if (ret)
-      dest = this->get_array();
+      dest = this->data_.array_;
     return ret;
   }
-  //----------------------------------------------------------------------//
 
-  //----------------------------------------------------------------------//
   template<>
   bool variant::get(goodform::object& dest) const
   {
     bool ret = (this->type_ == variant_type::object);
     if (ret)
-      dest = this->get_object();
+      dest = this->data_.object_;
     return ret;
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  const bool& variant::get_boolean() const { return (this->type_ == variant_type::boolean ? this->data_.boolean_ : const_bool); }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  const std::int8_t&   variant::get_int8()   const { return (this->type_ == variant_type::int8   ? this->data_.int8_   : const_int8  ); }
-  const std::int16_t&  variant::get_int16()  const { return (this->type_ == variant_type::int16  ? this->data_.int16_  : const_int16 ); }
-  const std::int32_t&  variant::get_int32()  const { return (this->type_ == variant_type::int32  ? this->data_.int32_  : const_int32 ); }
-  const std::int64_t&  variant::get_int64()  const { return (this->type_ == variant_type::int64  ? this->data_.int64_  : const_int64 ); }
-  const std::uint8_t&  variant::get_uint8()  const { return (this->type_ == variant_type::uint8  ? this->data_.uint8_  : const_uint8 ); }
-  const std::uint16_t& variant::get_uint16() const { return (this->type_ == variant_type::uint16 ? this->data_.uint16_ : const_uint16); }
-  const std::uint32_t& variant::get_uint32() const { return (this->type_ == variant_type::uint32 ? this->data_.uint32_ : const_uint32); }
-  const std::uint64_t& variant::get_uint64() const { return (this->type_ == variant_type::uint64 ? this->data_.uint64_ : const_uint64); }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  const float&  variant::get_float32() const { return (this->type_ == variant_type::float32 ? this->data_.float32_ : const_float);  }
-  const double& variant::get_float64() const { return (this->type_ == variant_type::float64 ? this->data_.float64_ : const_double); }
-  //----------------------------------------------------------------------//
-
-
-
-  //----------------------------------------------------------------------//
-  const std::string& variant::get_string() const
-  {
-    return (this->type_ == variant_type::string ? this->data_.string_ : const_string);
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  const binary& variant::get_binary() const
-  {
-    return (this->type_ == variant_type::binary ? this->data_.binary_ : const_binary);
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  const array& variant::get_array() const
-  {
-    return (this->type_ == variant_type::array ? this->data_.array_ : const_array);
-  }
-  //----------------------------------------------------------------------//
-
-  //----------------------------------------------------------------------//
-  const object& variant::get_object() const
-  {
-    return (this->type_ == variant_type::object ? this->data_.object_ : const_object);
   }
   //----------------------------------------------------------------------//
 
@@ -961,104 +861,56 @@ namespace goodform
   //---------------------------------------------------------------------//
   variant::operator bool() const
   {
-    return this->get_boolean();
-  }
-  //---------------------------------------------------------------------//
-
-  //---------------------------------------------------------------------//
-  variant::operator std::int8_t() const
-  {
-    return this->get_int8();
-  }
-  //---------------------------------------------------------------------//
-
-  //---------------------------------------------------------------------//
-  variant::operator std::int16_t() const
-  {
-    return this->get_int16();
-  }
-  //---------------------------------------------------------------------//
-
-  //---------------------------------------------------------------------//
-  variant::operator std::int32_t() const
-  {
-    return this->get_int32();
+    return this->get<bool>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
   variant::operator std::int64_t() const
   {
-    return this->get_int64();
-  }
-  //---------------------------------------------------------------------//
-
-  //---------------------------------------------------------------------//
-  variant::operator std::uint8_t() const
-  {
-    return this->get_uint8();
-  }
-  //---------------------------------------------------------------------//
-
-  //---------------------------------------------------------------------//
-  variant::operator std::uint16_t() const
-  {
-    return this->get_uint16();
-  }
-  //---------------------------------------------------------------------//
-
-  //---------------------------------------------------------------------//
-  variant::operator std::uint32_t() const
-  {
-    return this->get_uint32();
+    return this->get<std::int64_t>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
   variant::operator std::uint64_t() const
   {
-    return this->get_uint64();
+    return this->get<std::uint64_t>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
-  variant::operator float() const
-  {
-    return this->get_float32();
-  }
-  //---------------------------------------------------------------------//
-  //---------------------------------------------------------------------//
   variant::operator double() const
   {
-    return this->get_float64();
+    return this->get<double>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
   variant::operator const std::string&() const
   {
-    return this->get_string();
+    return this->get<std::string>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
   variant::operator const goodform::binary&() const
   {
-    return this->get_binary();
+    return this->get<binary>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
   variant::operator const goodform::array&() const
   {
-    return this->get_array();
+    return this->get<array>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
   variant::operator const goodform::object&() const
   {
-    return this->get_object();
+    return this->get<object>();
   }
   //----------------------------------------------------------------------//
 #endif

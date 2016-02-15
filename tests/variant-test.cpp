@@ -7,12 +7,24 @@
 #include "msgpack.hpp"
 #include "json.hpp"
 
+#include <cmath>
+
 using namespace std;
 using namespace goodform;
 
 int main(int argc, char** argv)
 {
-
+  std::int64_t m = std::int64_t(double(std::numeric_limits<std::int64_t>::max()));
+  bool lt = std::numeric_limits<std::int64_t>::max() < static_cast<std::int64_t>(std::numeric_limits<double>::max());
+  if (lt)
+  {
+    double dbl = 5.5;
+    float flt = dbl;
+    float flt2 = static_cast<float>(dbl);
+    std::cout << dbl << std::endl;
+    std::cout << flt << std::endl;
+    std::cout << flt2 << std::endl;
+  }
 
   {
     bool passed = false;
@@ -29,8 +41,8 @@ int main(int argc, char** argv)
     {
       if (var2["compact"].is<bool>()
         && var2["compact"].get<bool>() == true
-        && var2["schema"].is<std::int32_t>()
-        && var2["schema"].get<std::int32_t>() == 0)
+        && var2["schema"].is<std::int64_t>()
+        && var2["schema"].get<std::int64_t>() == 0)
       {
         passed = true;
       }
@@ -90,20 +102,20 @@ int main(int argc, char** argv)
     } form_data;
 
     form_data.boolean = f.object().at("boolean").boolean().val();
-    form_data.ui8 = (std::uint8_t)f.object().at("ui8").number().gte(0).lte(std::numeric_limits<std::uint8_t>::max()).val();
-    form_data.i8 = (std::int8_t)f.object().at("i8").number().gte(std::numeric_limits<std::int8_t>::min()).lte(std::numeric_limits<std::int8_t>::max()).val();
+    form_data.ui8 = f.object().at("ui8").uint8().val();
+    form_data.i8 = f.object().at("i8").int8().val();
     
-    form_data.ui16 = (std::uint16_t)f.object().at("ui16").number().gte(0).lte(std::numeric_limits<std::uint16_t>::max()).val();
-    form_data.i16 = (std::int16_t)f.object().at("i16").number().gte(std::numeric_limits<std::int16_t>::min()).lte(std::numeric_limits<std::int16_t>::max()).val();
+    form_data.ui16 = f.object().at("ui16").uint16().val();
+    form_data.i16 = f.object().at("i16").int16().val();
 
-    form_data.ui32 = (std::uint32_t)f.object().at("ui32").number().gte(0).lte(std::numeric_limits<std::uint32_t>::max()).val();
-    form_data.i32 = (std::int32_t)f.object().at("i32").number().gte(std::numeric_limits<std::int32_t>::min()).lte(std::numeric_limits<std::int32_t>::max()).val();
+    form_data.ui32 = f.object().at("ui32").uint32().val();
+    form_data.i32 = f.object().at("i32").int32().val();
 
-    form_data.ui64 = (std::uint64_t)f.object().at("ui64").number().gte(0).lte(std::numeric_limits<std::uint64_t>::max()).val();
-    form_data.i64 = (std::int64_t)f.object().at("i64").number().gte(std::numeric_limits<std::int64_t>::min()).lte(std::numeric_limits<std::int64_t>::max()).val();
+    form_data.ui64 = f.object().at("ui64").uint64().val();
+    form_data.i64 = f.object().at("i64").int64().val();
 
-    form_data.real = (float)f.object().at("real").number().gte(std::numeric_limits<float>::min()).lte(std::numeric_limits<float>::max()).val();
-    form_data.dreal = f.object().at("dreal").number().gte(10).lt(11).val();
+    form_data.real = f.object().at("real").float32().val();
+    form_data.dreal = f.object().at("dreal").float64().gte(10).lt(11).val();
     
     form_data.str = f.object().at("str").string().match(std::regex("^a.*$")).val();
     f.object().at("bin");

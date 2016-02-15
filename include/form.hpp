@@ -76,7 +76,7 @@ namespace goodform
     array_validator(const std::vector<variant>& value, error_message& errorMessage);
 
     sub_form at(size_t index);
-    sub_form at(size_t index, const error_message& customerror_message);
+    //sub_form at(size_t index, const error_message& customerror_message);
     sub_form at(size_t index, const variant& default_variant);
     void for_each(const std::function<void(sub_form& element, size_t index)>& fn);
 
@@ -94,7 +94,7 @@ namespace goodform
     object_validator(const std::map<std::string, variant>& value, error_message& errorMessage);
 
     sub_form at(const std::string& key);
-    sub_form at(const std::string& key, const error_message& customerror_message);
+    //sub_form at(const std::string& key, const error_message& customerror_message);
     sub_form at(const std::string& key, const variant& default_variant);
 
     const std::map<std::string, variant>& val() const;
@@ -106,9 +106,7 @@ namespace goodform
   {
   private:
     error_message& error_;
-
-    static bool is_number(const variant& v);
-    static double convert_to_double(const variant& v);
+    //static double convert_to_double(const variant& v);
   protected:
     const variant& variant_;
   public:
@@ -116,37 +114,42 @@ namespace goodform
     sub_form(const sub_form& source);
 
     boolean_validator boolean();
-    boolean_validator boolean(const error_message& customerror_message);
+    //boolean_validator boolean(const error_message& customerror_message);
     boolean_validator boolean(bool default_value);
-    number_validator<double> number();
-    number_validator<double> number(const error_message& customerror_message);
-    number_validator<double> number(double default_value);
-//    number_validator<std::int64_t> integer();
-//    number_validator<std::int64_t> integer(const error_message& customerror_message);
-//    number_validator<std::int64_t> integer(std::int64_t default_value);
-//    number_validator<std::uint64_t> uinteger();
-//    number_validator<std::uint64_t> uinteger(const error_message& customerror_message);
-//    number_validator<std::uint64_t> uinteger(std::uint64_t default_value);
-//    number_validator<double> real();
-//    number_validator<double> real(const error_message& customerror_message);
-//    number_validator<double> real(double default_value);
+    number_validator<std::int8_t> int8();
+    number_validator<std::int8_t> int8(std::int8_t default_value);
+    number_validator<std::int16_t> int16();
+    number_validator<std::int16_t> int16(std::int16_t default_value);
+    number_validator<std::int32_t> int32();
+    number_validator<std::int32_t> int32(std::int32_t default_value);
+    number_validator<std::int64_t> int64();
+    number_validator<std::int64_t> int64(std::int64_t default_value);
+    number_validator<std::uint8_t> uint8();
+    number_validator<std::uint8_t> uint8(std::uint8_t default_value);
+    number_validator<std::uint16_t> uint16();
+    number_validator<std::uint16_t> uint16(std::uint16_t default_value);
+    number_validator<std::uint32_t> uint32();
+    number_validator<std::uint32_t> uint32(std::uint32_t default_value);
+    number_validator<std::uint64_t> uint64();
+    number_validator<std::uint64_t> uint64(std::uint64_t default_value);
+    number_validator<float> float32();
+    number_validator<float> float32(float default_value);
+    number_validator<double> float64();
+    number_validator<double> float64(double default_value);
     string_validator string();
-    string_validator string(const error_message& customerror_message);
     string_validator string(const std::string& default_value);
     array_validator array();
-    array_validator array(const error_message& customerror_message);
     array_validator array(const std::vector<variant>& default_value);
     object_validator object();
-    object_validator object(const error_message& customerror_message);
     object_validator object(const std::map<std::string, variant>& default_value);
 
-    boolean_validator b() { return this->boolean(); }
-    boolean_validator b(const error_message& customerror_message) { return this->boolean(customerror_message); }
-    boolean_validator b(bool default_value) { return this->boolean(default_value); }
-
-    number_validator<double> n() { return this->number(); }
-    number_validator<double> n(const error_message& customerror_message) { return this->number(customerror_message); }
-    number_validator<double> n(std::int64_t default_value) { return this->number(default_value); }
+//    boolean_validator b() { return this->boolean(); }
+//    boolean_validator b(const error_message& customerror_message) { return this->boolean(customerror_message); }
+//    boolean_validator b(bool default_value) { return this->boolean(default_value); }
+//
+//    number_validator<double> n() { return this->number(); }
+//    number_validator<double> n(const error_message& customerror_message) { return this->number(customerror_message); }
+//    number_validator<double> n(std::int64_t default_value) { return this->number(default_value); }
 
 //    number_validator<std::int64_t> i() { return this->integer(); }
 //    number_validator<std::int64_t> i(const error_message& customerror_message) { return this->integer(customerror_message); }
@@ -158,13 +161,13 @@ namespace goodform
 //    number_validator<double> f(const error_message& customerror_message) { return this->real(customerror_message); }
 //    number_validator<double> f(double default_value) { return this->real(default_value); }
     string_validator s() { return this->string(); }
-    string_validator s(const error_message& customerror_message) { return this->string(customerror_message); }
+    //string_validator s(const error_message& customerror_message) { return this->string(customerror_message); }
     string_validator s(const std::string& default_value) { return this->string(default_value); }
     array_validator a() { return this->array(); }
-    array_validator a(const error_message& customerror_message) { return this->array(customerror_message); }
+    //array_validator a(const error_message& customerror_message) { return this->array(customerror_message); }
     array_validator a(const std::vector<variant>& default_value) { return this->array(default_value); }
     object_validator o() { return this->object(); }
-    object_validator o(const error_message& customerror_message) { return this->object(customerror_message); }
+    //object_validator o(const error_message& customerror_message) { return this->object(customerror_message); }
     object_validator o(const std::map<std::string, variant>& default_value) { return this->object(default_value); }
   };
   //======================================================================//
@@ -282,12 +285,8 @@ namespace goodform
 
   }
 
-  sub_form array_validator::at(size_t index)
-  {
-    return this->at(index, error_message("INDEX (" + std::to_string(index) + ") OUT OF RANGE"));
-  }
 
-  sub_form array_validator::at(size_t index, const error_message& customerror_message)
+  sub_form array_validator::at(size_t index)
   {
     if (this->value_.size() > index)
     {
@@ -332,11 +331,6 @@ namespace goodform
 
   sub_form object_validator::at(const std::string& key)
   {
-    return this->at(key, error_message("KEY (" + key + ") DOES NOT EXIST"));
-  }
-
-  sub_form object_validator::at(const std::string& key, const error_message& customerror_message)
-  {
     auto it = this->value_.find(key);
     if (it != this->value_.end())
     {
@@ -347,7 +341,7 @@ namespace goodform
     {
       sub_form ret(variant().get<std::nullptr_t>(), this->error_);
       if (this->error_.empty())
-        this->error_ = customerror_message;
+        this->error_ = error_message("KEY (" + key + ") DOES NOT EXIST");
       return ret;
     }
   }
@@ -366,9 +360,6 @@ namespace goodform
   //======================================================================//
 
   //======================================================================//
-
-
-
   sub_form::sub_form(const variant& v, error_message& err_msg) : variant_(v), error_(err_msg)
   {
 
@@ -379,16 +370,11 @@ namespace goodform
   {
 
   }
-
+  
   boolean_validator sub_form::boolean()
   {
-    return this->boolean(error_message("TYPE NOT BOOLEAN"));
-  }
-  
-  boolean_validator sub_form::boolean(const error_message& customerror_message)
-  {
     if (!this->variant_.is<bool>())
-      this->error_ = customerror_message;
+      this->error_ = error_message("TYPE NOT BOOLEAN");
 
     boolean_validator ret(this->variant_.get<bool>());
     return ret;
@@ -400,56 +386,217 @@ namespace goodform
     return ret;
   }
 
-  bool sub_form::is_number(const variant& v)
+//  bool sub_form::can_be_int8(const variant& v)
+//  {
+//    return (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int8_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int8_t>::max())
+//     || (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::int8_t>::max());
+//  }
+//
+//  bool sub_form::can_be_int16(const variant& v)
+//  {
+//    return (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int16_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int16_t>::max())
+//      || (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::int16_t>::max());
+//  }
+//
+//  bool sub_form::can_be_int32(const variant& v)
+//  {
+//    return (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int32_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int32_t>::max())
+//      || (v.type() == variant_type::unsigned_integer && v.get{std::uint64_t>() <= std::numeric_limits<std::int32_t>::max());
+//  }
+//
+//  bool sub_form::can_be_int64(const variant& v)
+//  {
+//    return (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int64_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int64_t>::max())
+//      || (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::int64_t>::max());
+//  }
+
+
+//  double sub_form::convert_to_double(const variant& v)
+//  {
+//    double ret = 0;
+//
+//    if (v.is<std::int8_t>())    ret = (double)(v.get<std::int8_t>());
+//    if (v.is<std::int16_t>())   ret = (double)(v.get<std::int16_t>());
+//    if (v.is<std::int32_t>())   ret = (double)(v.get<std::int32_t>());
+//    if (v.is<std::int64_t>())   ret = (double)(v.get<std::int64_t>());
+//    if (v.is<std::uint8_t>())   ret = (double)(v.get<std::uint8_t>());
+//    if (v.is<std::uint16_t>())  ret = (double)(v.get<std::uint16_t>());
+//    if (v.is<std::uint32_t>())  ret = (double)(v.get<std::uint32_t>());
+//    if (v.is<std::uint64_t>())  ret = (double)(v.get<std::uint64_t>());
+//    if (v.is<float>())          ret = (double)(v.get<float>());
+//    if (v.is<double>())         ret = v.get<double>();
+//
+//    return ret;
+//  }
+
+  number_validator<std::int8_t> sub_form::int8()
   {
-    return (
-        v.is<std::int8_t>() ||
-        v.is<std::int16_t>() ||
-        v.is<std::int32_t>() ||
-        v.is<std::int64_t>() ||
-        v.is<std::uint8_t>() ||
-        v.is<std::uint16_t>() ||
-        v.is<std::uint32_t>() ||
-        v.is<std::uint64_t>() ||
-        v.is<float>() ||
-        v.is<double>());
+    std::int8_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A int8_t");
+    return number_validator<std::int8_t>(val, this->error_);
   }
 
-  double sub_form::convert_to_double(const variant& v)
+  number_validator<std::int8_t> sub_form::int8(std::int8_t default_value)
   {
-    double ret = 0;
-
-    if (v.is<std::int8_t>())    ret = (double)(v.get<std::int8_t>());
-    if (v.is<std::int16_t>())   ret = (double)(v.get<std::int16_t>());
-    if (v.is<std::int32_t>())   ret = (double)(v.get<std::int32_t>());
-    if (v.is<std::int64_t>())   ret = (double)(v.get<std::int64_t>());
-    if (v.is<std::uint8_t>())   ret = (double)(v.get<std::uint8_t>());
-    if (v.is<std::uint16_t>())  ret = (double)(v.get<std::uint16_t>());
-    if (v.is<std::uint32_t>())  ret = (double)(v.get<std::uint32_t>());
-    if (v.is<std::uint64_t>())  ret = (double)(v.get<std::uint64_t>());
-    if (v.is<float>())          ret = (double)(v.get<float>());
-    if (v.is<double>())         ret = v.get<double>();
-
-    return ret;
+    std::int8_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::int8_t>(val, this->error_);
+    else
+      return number_validator<std::int8_t>(default_value, this->error_);
   }
 
-  number_validator<double> sub_form::number()
+  number_validator<std::int16_t> sub_form::int16()
   {
-    return this->number(error_message("NOT A NUMBER"));
+    std::int16_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A int16_t");
+    return number_validator<std::int16_t>(val, this->error_);
   }
 
-  number_validator<double> sub_form::number(const error_message& customerror_message)
+  number_validator<std::int16_t> sub_form::int16(std::int16_t default_value)
   {
-    if (!is_number(this->variant_))
-      this->error_ = customerror_message;
-    number_validator<double> ret(convert_to_double(this->variant_), this->error_);
-    return ret;
+    std::int16_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::int16_t>(val, this->error_);
+    else
+      return number_validator<std::int16_t>(default_value, this->error_);
   }
 
-  number_validator<double> sub_form::number(double default_value)
+  number_validator<std::int32_t> sub_form::int32()
   {
-    number_validator<double> ret(is_number(this->variant_) ? convert_to_double(this->variant_) : default_value, this->error_);
-    return ret;
+    std::int32_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A int32_t");
+    return number_validator<std::int32_t>(val, this->error_);
+  }
+
+  number_validator<std::int32_t> sub_form::int32(std::int32_t default_value)
+  {
+    std::int8_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::int32_t>(val, this->error_);
+    else
+      return number_validator<std::int32_t>(default_value, this->error_);
+  }
+
+  number_validator<std::int64_t> sub_form::int64()
+  {
+    std::int64_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A int64_t");
+    return number_validator<std::int64_t>(val, this->error_);
+  }
+
+  number_validator<std::int64_t> sub_form::int64(std::int64_t default_value)
+  {
+    std::int64_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::int64_t>(val, this->error_);
+    else
+      return number_validator<std::int64_t>(default_value, this->error_);
+  }
+
+  number_validator<std::uint8_t> sub_form::uint8()
+  {
+    std::uint8_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A uint8_t");
+    return number_validator<std::uint8_t>(val, this->error_);
+  }
+
+  number_validator<std::uint8_t> sub_form::uint8(std::uint8_t default_value)
+  {
+    std::uint8_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::uint8_t>(val, this->error_);
+    else
+      return number_validator<std::uint8_t>(default_value, this->error_);
+  }
+
+  number_validator<std::uint16_t> sub_form::uint16()
+  {
+    std::uint16_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A uint16_t");
+    return number_validator<std::uint16_t>(val, this->error_);
+  }
+
+  number_validator<std::uint16_t> sub_form::uint16(std::uint16_t default_value)
+  {
+    std::uint16_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::uint16_t>(val, this->error_);
+    else
+      return number_validator<std::uint16_t>(default_value, this->error_);
+  }
+
+  number_validator<std::uint32_t> sub_form::uint32()
+  {
+    std::uint32_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A uint32_t");
+    return number_validator<std::uint32_t>(val, this->error_);
+  }
+
+  number_validator<std::uint32_t> sub_form::uint32(std::uint32_t default_value)
+  {
+    std::uint32_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::uint32_t>(val, this->error_);
+    else
+      return number_validator<std::uint32_t>(default_value, this->error_);
+  }
+
+  number_validator<std::uint64_t> sub_form::uint64()
+  {
+    std::uint64_t val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A uint64_t");
+    return number_validator<std::uint64_t>(val, this->error_);
+  }
+
+  number_validator<std::uint64_t> sub_form::uint64(std::uint64_t default_value)
+  {
+    std::uint64_t val;
+    if (this->variant_.get(val))
+      return number_validator<std::uint64_t>(val, this->error_);
+    else
+      return number_validator<std::uint64_t>(default_value, this->error_);
+  }
+
+  number_validator<float> sub_form::float32()
+  {
+    float val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A float32");
+    return number_validator<float>(val, this->error_);
+  }
+
+  number_validator<float> sub_form::float32(float default_value)
+  {
+    float val;
+    if (this->variant_.get(val))
+      return number_validator<float>(val, this->error_);
+    else
+      return number_validator<float>(default_value, this->error_);
+  }
+
+  number_validator<double> sub_form::float64()
+  {
+    double val;
+    if (!this->variant_.get(val))
+      this->error_ = error_message("NOT A float64");
+    return number_validator<double>(val, this->error_);
+  }
+
+  number_validator<double> sub_form::float64(double default_value)
+  {
+    double val;
+    if (this->variant_.get(val))
+      return number_validator<double>(val, this->error_);
+    else
+      return number_validator<double>(default_value, this->error_);
   }
 
 //  number_validator<std::int64_t> sub_form::integer()
@@ -519,13 +666,8 @@ namespace goodform
 
   string_validator sub_form::string()
   {
-    return this->string(error_message("TYPE NOT STRING"));
-  }
-
-  string_validator sub_form::string(const error_message& customerror_message)
-  {
     if (!this->variant_.is<std::string>())
-      this->error_ = customerror_message;
+      this->error_ = error_message("TYPE NOT STRING");
 
     string_validator ret(this->variant_.get<std::string>(), this->error_);
     return ret;
@@ -539,14 +681,9 @@ namespace goodform
 
   array_validator sub_form::array()
   {
-    return this->array(error_message("NOT AN ARRAY"));
-  }
-
-  array_validator sub_form::array(const error_message& cust_err_msg)
-  {
     array_validator ret(this->variant_.get<goodform::array>(), this->error_);
     if (!this->variant_.is<goodform::array>())
-      this->error_ = cust_err_msg;
+      this->error_ = error_message("NOT AN ARRAY");
     return ret;
   }
 
@@ -558,14 +695,9 @@ namespace goodform
 
   object_validator sub_form::object()
   {
-    return this->object(error_message("NOT AN OBJECT"));
-  }
-
-  object_validator sub_form::object(const error_message& cust_err_msg)
-  {
     object_validator ret(this->variant_.get<goodform::object>(), this->error_);
     if (!this->variant_.is<goodform::object>())
-      this->error_ = cust_err_msg;
+      this->error_ = error_message("NOT AN OBJECT");
     return ret;
   }
 

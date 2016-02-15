@@ -9,12 +9,12 @@ namespace goodform
 
     // Ignoring fixints for now.
 
-    if (v.is_object() && v.size() <= 15) // fixmap	1000xxxx
+    if (v.is<object>() && v.size() <= 15) // fixmap	1000xxxx
     {
       ret = output.put(static_cast<char>(0x80 | (0x0F & v.size()))).good();
       if (ret)
       {
-        const goodform::object& tmp = v.get_object();
+        const goodform::object& tmp = v.get<object>();
         for (goodform::object::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
         {
           variant key = it->first;
@@ -24,168 +24,179 @@ namespace goodform
         }
       }
     }
-    else if (v.is_array() && v.size() <= 15) // fixarray	1001xxxx
+    else if (v.is<array>() && v.size() <= 15) // fixarray	1001xxxx
     {
       ret = output.put(static_cast<char>(0x90 | (0x0F & v.size()))).good();
       if (ret)
       {
-        const goodform::array& tmp = v.get_array();
+        const goodform::array& tmp = v.get<array>();
         for (goodform::array::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
         {
           ret = msgpack::serialize(*it, output);
         }
       }
     }
-    else if (v.is_string() && v.size() <= 31) // fixstr	101xxxxx
+    else if (v.is<std::string>() && v.size() <= 31) // fixstr	101xxxxx
     {
       ret = output.put(static_cast<char>(0xA0 | (0x1F & v.size()))).good();
       if (ret)
       {
-        ret = output.write(&(v.get_string()[0]), v.size()).good();
+        ret = output.write(&(v.get<std::string>()[0]), v.size()).good();
       }
     }
-    else if (v.is_null())
+    else if (v.is<std::nullptr_t>())
     {
       output.put(static_cast<char>(0xC0));
     }
-    else if (v.is_boolean())
+    else if (v.is<bool>())
     {
-      if (v.get_boolean())
+      if (v.get<bool>())
         output.put(static_cast<char>(0xC3));
       else
         output.put(static_cast<char>(0xC2));
     }
-    else if (v.is_binary() && v.size() <= 0xFF) // Bin 8
+    else if (v.is<binary>() && v.size() <= 0xFF) // Bin 8
     {
       if (!output.put(static_cast<char>(0xC4))
         || !output.put(static_cast<char>(0xFF & v.size()))
-        || !output.write(v.get_binary().data(), v.size()))
+        || !output.write(v.get<binary>().data(), v.size()))
       {
         ret = false;
       }
     }
-    else if (v.is_binary() && v.size() <= 0xFFFF) // Bin 16
+    else if (v.is<binary>() && v.size() <= 0xFFFF) // Bin 16
     {
       std::uint16_t sz_be(htons(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xC5))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
-        || !output.write(v.get_binary().data(), v.size()))
+        || !output.write(v.get<binary>().data(), v.size()))
       {
         ret = false;
       }
     }
-    else if (v.is_binary() && v.size() <= 0xFFFFFFFF) // Bin 32
+    else if (v.is<binary>() && v.size() <= 0xFFFFFFFF) // Bin 32
     {
       std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xC6))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
-        || !output.write(v.get_binary().data(), v.size()))
+        || !output.write(v.get<binary>().data(), v.size()))
       {
         ret = false;
       }
     }
-    else if (v.is_float32())
+    else if (v.type() == variant_type::floating_point)
     {
-      numeric_union32 nu;
-      nu.f = v.get_float32();
-      std::uint32_t be(htonl(nu.i));
-      ret = output.put(static_cast<char>(0xCA)).good();
-      if (ret)
-        ret = output.write((char*)&be, sizeof(be)).good();
+      double dbl = v.get<double>();
+
+      if (static_cast<float>(dbl) == dbl)
+      {
+        numeric_union32 nu;
+        nu.f = static_cast<float>(dbl);
+        std::uint32_t be(htonl(nu.i));
+        ret = output.put(static_cast<char>(0xCA)).good();
+        if (ret)
+          ret = output.write((char*)&be, sizeof(be)).good();
+      }
+      else
+      {
+        numeric_union64 nu;
+        nu.f = dbl;
+        std::uint64_t be(htonll(nu.i));
+        ret = output.put(static_cast<char>(0xCB)).good();
+        if (ret)
+          ret = output.write((char*)&be, sizeof(be)).good();
+      }
     }
-    else if (v.is_float64())
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint8_t>::max())
     {
-      numeric_union64 nu;
-      nu.f = v.get_float64();
-      std::uint64_t be(htonll(nu.i));
-      ret = output.put(static_cast<char>(0xCB)).good();
-      if (ret)
-        ret = output.write((char*)&be, sizeof(be)).good();
-    }
-    else if (v.is_uint8())
-    {
+      std::uint8_t val = static_cast<std::uint8_t>(v.get<std::uint64_t>());
       ret = output.put(static_cast<char>(0xCC)).good();
       if (ret)
-        ret = output.write((char*)&v.get_uint8(), sizeof(std::uint8_t)).good();
+        ret = output.write((char*)&val, sizeof(std::uint8_t)).good();
     }
-    else if (v.is_uint16())
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint16_t>::max())
     {
-      std::uint16_t be(htons(v.get_uint16()));
+      std::uint16_t val = static_cast<std::uint16_t>(v.get<std::uint64_t>());
+      std::uint16_t be(htons(val));
       ret = output.put(static_cast<char>(0xCD)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.is_uint32())
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint32_t>::max())
     {
-      std::uint32_t be(htonl(v.get_uint32()));
+      std::uint32_t val = static_cast<std::uint32_t>(v.get<std::uint64_t>());
+      std::uint32_t be(htonl(val));
       ret = output.put(static_cast<char>(0xCE)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.is_uint64())
+    else if (v.type() == variant_type::unsigned_integer)
     {
-      std::uint64_t be(htonll(v.get_uint64()));
+      std::uint64_t be(htonll(v.get<std::uint64_t>()));
       ret = output.put(static_cast<char>(0xCF)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.is_int8())
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int8_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int8_t>::max())
     {
+      std::int8_t val = static_cast<std::int8_t>(v.get<std::int64_t>());
       ret = output.put(static_cast<char>(0xD0)).good();
       if (ret)
-        ret = output.write((char*)&v.get_int8(), sizeof(std::int8_t)).good();
+        ret = output.write((char*)&val, sizeof(std::int8_t)).good();
     }
-    else if (v.is_int16())
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int16_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int16_t>::max())
     {
-      std::int16_t be(htons(v.get_int16()));
+      std::int16_t val = static_cast<std::int16_t>(v.get<std::int64_t>());
+      std::int16_t be(htons(val));
       ret = output.put(static_cast<char>(0xD1)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.is_int32())
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int32_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int32_t>::max())
     {
-      std::int32_t be(htonl(v.get_int32()));
+      std::int32_t val = static_cast<std::int32_t>(v.get<std::int64_t>());
+      std::int32_t be(htonl(val));
       ret = output.put(static_cast<char>(0xD2)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.is_int64())
+    else if (v.type() == variant_type::signed_integer)
     {
-      std::int64_t be(htonll(v.get_int64()));
+      std::int64_t be(htonll(v.get<std::int64_t>()));
       ret = output.put(static_cast<char>(0xD3)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.is_string() && v.size() <= 0xFF) // str 8
+    else if (v.is<std::string>() && v.size() <= 0xFF) // str 8
     {
       if (!output.put(static_cast<char>(0xD9))
         || !output.put(static_cast<char>(0xFF & v.size()))
-        || !output.write(v.get_binary().data(), v.size()))
+        || !output.write(v.get<binary>().data(), v.size()))
       {
         ret = false;
       }
     }
-    else if (v.is_string() && v.size() <= 0xFFFF) // str 16
+    else if (v.is<std::string>() && v.size() <= 0xFFFF) // str 16
     {
       std::uint16_t sz_be(htons(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDA))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
-        || !output.write(v.get_binary().data(), v.size()))
+        || !output.write(v.get<binary>().data(), v.size()))
       {
         ret = false;
       }
     }
-    else if (v.is_string() && v.size() <= 0xFFFFFFFF) // str 32
+    else if (v.is<std::string>() && v.size() <= 0xFFFFFFFF) // str 32
     {
       std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDB))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
-        || !output.write(v.get_binary().data(), v.size()))
+        || !output.write(v.get<binary>().data(), v.size()))
       {
         ret = false;
       }
     }
-    else if (v.is_array() && v.size() <= 0xFFFF) // array 16
+    else if (v.is<array>() && v.size() <= 0xFFFF) // array 16
     {
       std::uint16_t sz_be(htons(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDC))
@@ -199,7 +210,7 @@ namespace goodform
           ret = msgpack::serialize(v[i], output);
       }
     }
-    else if (v.is_array() && v.size() <= 0xFFFFFFFF) // array 32
+    else if (v.is<array>() && v.size() <= 0xFFFFFFFF) // array 32
     {
       std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDD))
@@ -213,7 +224,7 @@ namespace goodform
           ret = msgpack::serialize(v[i], output);
       }
     }
-    else if (v.is_object() && v.size() <= 0xFFFF) // map 16
+    else if (v.is<object>() && v.size() <= 0xFFFF) // map 16
     {
       std::uint16_t sz_be(htons(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDE))
@@ -223,7 +234,7 @@ namespace goodform
       }
       else
       {
-        const goodform::object& o = v.get_object();
+        const goodform::object& o = v.get<object>();
         for (goodform::object::const_iterator it = o.begin(); it != o.end() && ret; ++it)
         {
           variant key(it->first);
@@ -234,7 +245,7 @@ namespace goodform
         }
       }
     }
-    else if (v.is_object() && v.size() <= 0xFFFFFFFF) // map 32
+    else if (v.is<object>() && v.size() <= 0xFFFFFFFF) // map 32
     {
       std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDF))
@@ -244,7 +255,7 @@ namespace goodform
       }
       else
       {
-        const goodform::object& o = v.get_object();
+        const goodform::object& o = v.get<object>();
         for (goodform::object::const_iterator it = o.begin(); it != o.end() && ret; ++it)
         {
           variant key(it->first);
@@ -286,10 +297,10 @@ namespace goodform
         for (size_t i = 0; i < sz; ++i)
         {
           variant key;
-          if (!msgpack::deserialize(input, key) || !key.is_string()) // Only supporting string keys.
+          if (!msgpack::deserialize(input, key) || !key.is<std::string>()) // Only supporting string keys.
             ret = false;
           else
-            ret = msgpack::deserialize(input, v[key.get_string()]);
+            ret = msgpack::deserialize(input, v[key.get<std::string>()]);
         }
       }
       else if (typeByte >= 0x90 && typeByte <= 0x9F) // fixarray	1001xxxx
@@ -535,10 +546,10 @@ namespace goodform
           for (size_t i = 0; ret && i < sz; ++i)
           {
             variant key;
-            if (!msgpack::deserialize(input, key) || !key.is_string()) // Only supporting string keys.
+            if (!msgpack::deserialize(input, key) || !key.is<std::string>()) // Only supporting string keys.
               ret = false;
             else
-              ret = msgpack::deserialize(input, v[key.get_string()]);
+              ret = msgpack::deserialize(input, v[key.get<std::string>()]);
           }
         }
       }
@@ -553,10 +564,10 @@ namespace goodform
           for (size_t i = 0; ret && i < sz; ++i)
           {
             variant key;
-            if (!msgpack::deserialize(input, key) || !key.is_string()) // Only supporting string keys.
+            if (!msgpack::deserialize(input, key) || !key.is<std::string>()) // Only supporting string keys.
               ret = false;
             else
-              ret = msgpack::deserialize(input, v[key.get_string()]);
+              ret = msgpack::deserialize(input, v[key.get<std::string>()]);
           }
         }
       }

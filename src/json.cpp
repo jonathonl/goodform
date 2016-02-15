@@ -79,14 +79,9 @@ namespace goodform
     {
       output << (v.get<bool>() ? "true":"false");
     }
-    else if (v.is<std::int8_t   >()) output << v.get<std::int8_t   >();
-    else if (v.is<std::int16_t  >()) output << v.get<std::int16_t  >();
-    else if (v.is<std::int32_t  >()) output << v.get<std::int32_t  >();
-    else if (v.is<std::int64_t  >()) output << v.get<std::int64_t  >();
-    else if (v.is<std::uint8_t  >()) output << v.get<std::uint8_t  >();
-    else if (v.is<std::uint16_t >()) output << v.get<std::uint16_t >();
-    else if (v.is<std::uint32_t >()) output << v.get<std::uint32_t >();
-    else if (v.is<std::uint64_t >()) output << v.get<std::uint64_t >();
+    else if (v.type() == variant_type::signed_integer) output << v.get<std::int64_t>();
+    else if (v.type() == variant_type::unsigned_integer) output << v.get<std::uint64_t>();
+    else if (v.type() == variant_type::floating_point) output << v.get<double>();
     else if (v.is<std::string>())
     {
       write_string(v.get<std::string>(), output);
@@ -359,6 +354,8 @@ namespace goodform
     }
     else if (isdigit(c) || c == '-')
     {
+      bool is_signed = (c == '-');
+
       std::string str_number;
       str_number += c;
       input.seekg(1, std::ios::cur);
@@ -389,9 +386,15 @@ namespace goodform
         ss >> tmp;
         v = (tmp);
       }
-      else
+      else if (is_signed)
       {
         std::int64_t tmp;
+        ss >> tmp;
+        v = (tmp);
+      }
+      else
+      {
+        std::uint64_t tmp;
         ss >> tmp;
         v = (tmp);
       }
