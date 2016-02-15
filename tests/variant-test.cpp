@@ -14,18 +14,6 @@ using namespace goodform;
 
 int main(int argc, char** argv)
 {
-  std::int64_t m = std::int64_t(double(std::numeric_limits<std::int64_t>::max()));
-  bool lt = std::numeric_limits<std::int64_t>::max() < static_cast<std::int64_t>(std::numeric_limits<double>::max());
-  if (lt)
-  {
-    double dbl = 5.5;
-    float flt = dbl;
-    float flt2 = static_cast<float>(dbl);
-    std::cout << dbl << std::endl;
-    std::cout << flt << std::endl;
-    std::cout << flt2 << std::endl;
-  }
-
   {
     bool passed = false;
     variant var1, var2;

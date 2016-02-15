@@ -1,39 +1,23 @@
 
 #include "variant.hpp"
 
+#include <assert.h>
+
 //######################################################################//
 namespace goodform
 {
-//  //----------------------------------------------------------------------//
-//  template<typename T>
-//  typename std::enable_if<std::is_integral<T>::value && std::is_signed<T>::value,T>::type
-//  signed_cast(typename std::make_unsigned<T>::type v) {
-//    T s;
-//    std::memcpy(&s,&v,sizeof v);
-//    return s;
-//  }
-//
-//  template<typename T>
-//  typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value,T>::type
-//  signed_cast(typename std::make_signed<T>::type v) {
-//    T s;
-//    std::memcpy(&s,&v,sizeof v);
-//    return s;
-//  }
-//  //----------------------------------------------------------------------//
-
   //----------------------------------------------------------------------//
-  const variant variant::null_variant = goodform::variant(nullptr);
+  const variant null_variant = goodform::variant(nullptr);
 
-  const std::nullptr_t variant::const_null = nullptr;
-  const bool variant::const_bool = false;
-  const std::int64_t  variant::const_int64  = 0;
-  const std::uint64_t variant::const_uint64 = 0;
-  const double variant::const_double = 0.0;
-  const std::string variant::const_string;
-  const binary variant::const_binary;
-  const array variant::const_array;
-  const object variant::const_object;
+  const std::nullptr_t const_null = nullptr;
+  const bool const_bool = false;
+  const std::int64_t  const_int64  = 0;
+  const std::uint64_t const_uint64 = 0;
+  const double const_double = 0.0;
+  const std::string const_string;
+  const binary const_binary;
+  const array const_array;
+  const object const_object;
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
@@ -614,15 +598,11 @@ namespace goodform
   template bool variant::can_be<std::uint64_t>() const;
   template<> bool variant::can_be<float>() const
   {
-    return (this->type() == variant_type::floating_point && this->data_.floating_point_ >= std::numeric_limits<float>::min() && this->data_.floating_point_ <= std::numeric_limits<float>::max()) //&& this->data_.floating_point_ == static_cast<float>(this->data_.floating_point_))
-      || (this->type() == variant_type::signed_integer && this->data_.signed_integer_ >= std::numeric_limits<float>::min() && this->data_.signed_integer_ <= std::numeric_limits<float>::max())
-      || (this->type() == variant_type::unsigned_integer && this->data_.unsigned_integer_ <= std::numeric_limits<float>::max());
+    return (this->type() == variant_type::floating_point || this->type() == variant_type::signed_integer || this->type() == variant_type::unsigned_integer);
   }
   template<> bool variant::can_be<double>() const
   {
-    return (this->type() == variant_type::floating_point)
-      || (this->type() == variant_type::signed_integer && this->data_.signed_integer_ >= std::numeric_limits<double>::min() && this->data_.signed_integer_ <= std::numeric_limits<double>::max())
-      || (this->type() == variant_type::unsigned_integer && this->data_.unsigned_integer_ <= std::numeric_limits<double>::max());
+    return (this->type() == variant_type::floating_point || this->type() == variant_type::signed_integer || this->type() == variant_type::unsigned_integer);
   }
   //----------------------------------------------------------------------//
 
@@ -680,9 +660,11 @@ namespace goodform
     if (ret)
     {
       if (this->type() == variant_type::signed_integer)
-        ret = static_cast<T>(this->data_.signed_integer_);
+        dest = static_cast<T>(this->data_.signed_integer_);
+      else if (this->type() == variant_type::unsigned_integer)
+        dest = static_cast<T>(this->data_.unsigned_integer_);
       else
-        ret = static_cast<T>(this->data_.unsigned_integer_);
+        assert(!"This should never happen");
     }
 
     return ret;
@@ -711,7 +693,17 @@ namespace goodform
   {
     bool ret = this->can_be<float>();
     if (ret)
-      dest = static_cast<float>(this->data_.floating_point_);
+    {
+      if (this->type() == variant_type::signed_integer)
+        dest = static_cast<float>(this->data_.signed_integer_);
+      else if (this->type() == variant_type::unsigned_integer)
+        dest = static_cast<float>(this->data_.unsigned_integer_);
+      else if (this->type() == variant_type::floating_point)
+        dest = static_cast<float>(this->data_.floating_point_);
+      else
+        assert(!"This should never happen");
+    }
+
     return ret;
   }
 
