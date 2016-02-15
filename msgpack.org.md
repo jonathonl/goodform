@@ -15,7 +15,6 @@ msgpack::deserialize(ss, var2);
 
 if (var2.is<object>())
 {
-  const object& obj = var2.get<object>();
-  std::cout << "{ \"compact\": " << obj["compact"].get<bool>() ? "true" : "false" << ", \"schema\": " << obj["schema"].get<int>() << " }" << std::endl
+  std::cout << "{ \"compact\": " << var2["compact"].get<bool>() ? "true" : "false" << ", \"schema\": " << var2["schema"].get<std::int64_t>() << " }" << std::endl
 }
 ```
