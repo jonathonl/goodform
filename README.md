@@ -20,11 +20,11 @@ struct
 {
   std::string foo;
   std::string bar;
-  short fooman;
+  std::int16_t fooman;
 } form_data;
-form_data.foo = f.object().at("foo").string().val();
-form_data.bar = f.object().at("bar").string().match(std::regex("^b.*$")).val();
-form_data.fooman = (short)f.object().at("fooman").number().gt(0).lte(std::numeric_limits<short>::max()).val();
+form_data.foo = f.at("foo").string().val();
+form_data.bar = f.at("bar").string().match(std::regex("^b.*$")).val();
+form_data.fooman = f.at("fooman").int16().gt(0).val();
 
 if (f.is_good())
 {
