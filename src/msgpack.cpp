@@ -284,7 +284,7 @@ namespace goodform
     {
       if (/*typeByte >= 0x00 &&*/ typeByte <= 0x7F) // positive fixint 0xxxxxxx
       {
-        v = std::int8_t(0x7F & typeByte);
+        v = std::uint8_t(0x7F & typeByte);
       }
       else if (typeByte >= 0xE0 && typeByte <= 0xFF) // negative fixint	111xxxxx
       {

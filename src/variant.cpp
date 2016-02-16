@@ -710,9 +710,18 @@ namespace goodform
   template<>
   bool variant::get(double& dest) const
   {
-    bool ret = this->type() == variant_type::floating_point;
+    bool ret = this->can_be<double>();
     if (ret)
-      dest = this->data_.floating_point_;
+    {
+      if (this->type() == variant_type::signed_integer)
+        dest = static_cast<float>(this->data_.signed_integer_);
+      else if (this->type() == variant_type::unsigned_integer)
+        dest = static_cast<float>(this->data_.unsigned_integer_);
+      else if (this->type() == variant_type::floating_point)
+        dest = this->data_.floating_point_;
+      else
+        assert(!"This should never happen");
+    }
     return ret;
   }
 
