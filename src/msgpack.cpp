@@ -112,7 +112,7 @@ namespace goodform
     }
     else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() < 0 && v.get<std::int64_t>() >= -31) // negative fixint	111xxxxx
     {
-      std::int8_t val = static_cast<std::int8_t>(v.get<std::uint64_t>());
+      std::int8_t val = static_cast<std::int8_t>(v.get<std::int64_t>());
       ret = output.put(static_cast<char>(0xE0 | (0x1F & (-1 * val)))).good();
     }
     else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint8_t>::max()) // Uint 8
