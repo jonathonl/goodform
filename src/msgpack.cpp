@@ -86,7 +86,7 @@ namespace goodform
     {
       double dbl = v.get<double>();
 
-      if (static_cast<float>(dbl) == dbl)
+      if (static_cast<float>(dbl) == dbl) // Float 32
       {
         numeric_union32 nu;
         nu.f = static_cast<float>(dbl);
@@ -95,7 +95,7 @@ namespace goodform
         if (ret)
           ret = output.write((char*)&be, sizeof(be)).good();
       }
-      else
+      else // Float 64
       {
         numeric_union64 nu;
         nu.f = dbl;
@@ -113,7 +113,7 @@ namespace goodform
     else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() < 0 && v.get<std::int64_t>() >= -31) // negative fixint	111xxxxx
     {
       std::int8_t val = static_cast<std::int8_t>(v.get<std::int64_t>());
-      ret = output.put(static_cast<char>(0xE0 | (0x1F & (-1 * val)))).good();
+      ret = output.put(static_cast<char>(0xE0 | (0x1F & (val * -1)))).good();
     }
     else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint8_t>::max()) // Uint 8
     {
@@ -296,7 +296,7 @@ namespace goodform
       }
       else if (typeByte >= 0xE0 && typeByte <= 0xFF) // negative fixint	111xxxxx
       {
-        v = std::int8_t(0x1F & typeByte);
+        v = std::int8_t(0x1F & typeByte) * -1;
       }
       else if (typeByte >= 0x80 && typeByte <= 0x8F) // fixmap	1000xxxx
       {
