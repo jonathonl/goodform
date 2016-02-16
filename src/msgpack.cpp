@@ -296,7 +296,7 @@ namespace goodform
       }
       else if (typeByte >= 0xE0 && typeByte <= 0xFF) // negative fixint	111xxxxx
       {
-        v = std::int8_t(0x1F & typeByte) * -1;
+        v = std::int8_t((0x1F & typeByte ) * -1);
       }
       else if (typeByte >= 0x80 && typeByte <= 0x8F) // fixmap	1000xxxx
       {
