@@ -23,7 +23,7 @@ struct
 } mpack;
 
 mpack.compact = form.at("compact").boolean().val();
-mpack.schema = form.at("schema").uint32().val();
+mpack.schema = form.at("schema").int32().val();
 
 if (form.is_good())
 {
