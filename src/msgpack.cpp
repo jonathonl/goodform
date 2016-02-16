@@ -7,8 +7,6 @@ namespace goodform
   {
     bool ret = true;
 
-    // Ignoring fixints for now.
-
     if (v.is<object>() && v.size() <= 15) // fixmap	1000xxxx
     {
       ret = output.put(static_cast<char>(0x80 | (0x0F & v.size()))).good();
@@ -107,14 +105,24 @@ namespace goodform
           ret = output.write((char*)&be, sizeof(be)).good();
       }
     }
-    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint8_t>::max())
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= 0x7F) // positive fixint 0xxxxxxx
+    {
+      std::uint8_t val = static_cast<std::uint8_t>(v.get<std::uint64_t>());
+      ret = output.put(static_cast<char>(std::uint8_t(0x7F) & val)).good();
+    }
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() < 0 && v.get<std::int64_t>() >= -31) // negative fixint	111xxxxx
+    {
+      std::int8_t val = static_cast<std::int8_t>(v.get<std::uint64_t>());
+      ret = output.put(static_cast<char>(0xE0 | (0x1F & (-1 * val)))).good();
+    }
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint8_t>::max()) // Uint 8
     {
       std::uint8_t val = static_cast<std::uint8_t>(v.get<std::uint64_t>());
       ret = output.put(static_cast<char>(0xCC)).good();
       if (ret)
         ret = output.write((char*)&val, sizeof(std::uint8_t)).good();
     }
-    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint16_t>::max())
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint16_t>::max()) // Uint 16
     {
       std::uint16_t val = static_cast<std::uint16_t>(v.get<std::uint64_t>());
       std::uint16_t be(htons(val));
@@ -122,7 +130,7 @@ namespace goodform
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint32_t>::max())
+    else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint32_t>::max()) // Uint 32
     {
       std::uint32_t val = static_cast<std::uint32_t>(v.get<std::uint64_t>());
       std::uint32_t be(htonl(val));
@@ -130,21 +138,21 @@ namespace goodform
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.type() == variant_type::unsigned_integer)
+    else if (v.type() == variant_type::unsigned_integer) // Uint 64
     {
       std::uint64_t be(htonll(v.get<std::uint64_t>()));
       ret = output.put(static_cast<char>(0xCF)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int8_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int8_t>::max())
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int8_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int8_t>::max()) // Int 8
     {
       std::int8_t val = static_cast<std::int8_t>(v.get<std::int64_t>());
       ret = output.put(static_cast<char>(0xD0)).good();
       if (ret)
         ret = output.write((char*)&val, sizeof(std::int8_t)).good();
     }
-    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int16_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int16_t>::max())
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int16_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int16_t>::max()) // Int 16
     {
       std::int16_t val = static_cast<std::int16_t>(v.get<std::int64_t>());
       std::int16_t be(htons(val));
@@ -152,7 +160,7 @@ namespace goodform
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int32_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int32_t>::max())
+    else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int32_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int32_t>::max()) // Int 32
     {
       std::int32_t val = static_cast<std::int32_t>(v.get<std::int64_t>());
       std::int32_t be(htonl(val));
@@ -160,7 +168,7 @@ namespace goodform
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
-    else if (v.type() == variant_type::signed_integer)
+    else if (v.type() == variant_type::signed_integer) // Int 64
     {
       std::int64_t be(htonll(v.get<std::int64_t>()));
       ret = output.put(static_cast<char>(0xD3)).good();
