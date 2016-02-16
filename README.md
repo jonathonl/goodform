@@ -1,37 +1,84 @@
 # GoodForm
 Form validation library. Includes MsgPack and JSON serializer/deserializer.
 
-#Usage
+#MsgPack Usage
 ```c++
-using namsepace goodform;
-    
-variant var;
-std::stringstream s;
-s << "{" << std::endl
-  << "\"foo\":\"bar\"," << std::endl
-  << "\"bar\":\"barman\"," << std::endl
-  << "\"fooman\":12395" << std::endl
-  << "}" << std::endl;
-  
-json::deserialize(ss, var);
-form f(var);
+std::stringstream ss;
+goodform::variant var, var2;
+var = goodform::object
+  {
+    {"compact", true},
+    {"schema", 0}
+  };
+
+goodform::msgpack::serialize(var, ss);
+goodform::msgpack::deserialize(ss, var2);
+
+goodform::form form(var2);
 
 struct
 {
-  std::string foo;
-  std::string bar;
-  std::int16_t fooman;
-} form_data;
-form_data.foo = f.at("foo").string().val();
-form_data.bar = f.at("bar").string().match(std::regex("^b.*$")).val();
-form_data.fooman = f.at("fooman").int16().gt(0).val();
+  bool compact;
+  std::int32_t schema;
+} mpack;
 
-if (f.is_good())
+mpack.compact = form.at("compact").boolean().val();
+mpack.schema = form.at("schema").uint32().val();
+
+if (form.is_good())
 {
-  // Use form_data.
+  std::cout << "{ \"compact\": " << std::boolalpha << mpack.compact << ", \"schema\": " << mpack.schema << " }" << std::endl;
+}
+```
+
+#JSON Usage
+```c++
+goodform::variant var;
+std::stringstream ss;
+ss << "{" << std::endl
+  << "\"first_name\":\"John\", // This is a comment" << std::endl
+  << "\"last_name\":\"Smith\", " << std::endl
+  << "\"age\": 23," << std::endl
+  << "\"gpa\": 4.0," << std::endl
+  << "\"email\":\"john.smith@example.com\"," << std::endl
+  << "\"password_hash\":\"5f4dcc3b5aa765d61d8327deb882cf99\"," << std::endl
+  << "\"interests\": [\"sailing\",\"swimming\",\"yoga\"]" << std::endl
+  << "}" << std::endl;
+
+goodform::json::deserialize(ss, var);
+
+goodform::form form(var);
+
+struct
+{
+  std::string first_name;
+  std::string last_name;
+  std::uint8_t age;
+  float gpa;
+  std::string email;
+  std::string password_hash;
+  std::list<std::string> interests;
+} form_data;
+
+
+form_data.first_name = form.at("first_name").string().match(std::regex("^[a-zA-Z ]{1,64}$")).val();
+form_data.last_name = form.at("last_name").string().match(std::regex("^[a-zA-Z ]{1,64}$")).val();
+form_data.age = form.at("age").uint8().val();
+form_data.gpa = form.at("gpa").float32().gte(0).lte(4.0).val();
+form_data.email = form.at("email").string().match(std::regex("^.{3,256}$")).val();
+form_data.password_hash = form.at("password_hash").string().match(std::regex("^[a-fA-F0-9]{32}$")).val();
+
+form.at("interests").array().for_each([&form_data](goodform::sub_form& sf, std::size_t i)
+{
+  form_data.interests.push_back(sf.string().val());
+});
+
+if (form.is_good())
+{
+  // Use validated form_data.
 }
 else
 {
-  // Invalid form.
+  // Handle error.
 }
 ```
