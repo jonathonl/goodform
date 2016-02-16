@@ -72,6 +72,7 @@ int main(int argc, char** argv)
       float gpa;
       std::string email;
       std::string password_hash;
+      bool subscribe_to_email_marketing;
       std::list<std::string> interests;
     } form_data;
 
@@ -82,6 +83,7 @@ int main(int argc, char** argv)
     form_data.gpa = form.at("gpa").float32().gte(0).lte(4.0).val();
     form_data.email = form.at("email").string().match(std::regex("^.{3,256}$")).val();
     form_data.password_hash = form.at("password_hash").string().match(std::regex("^[a-fA-F0-9]{32}$")).val();
+    form_data.subscribe_to_email_marketing = form.at("subscribe_to_email_marketing", true).boolean().val(); // Optional field defaults to true.
 
     form.at("interests").array().for_each([&form_data](goodform::sub_form& sf, std::size_t i)
     {
