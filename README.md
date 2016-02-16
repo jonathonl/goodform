@@ -57,6 +57,7 @@ struct
   float gpa;
   std::string email;
   std::string password_hash;
+  bool subscribe_to_email_marketing;
   std::list<std::string> interests;
 } form_data;
 
