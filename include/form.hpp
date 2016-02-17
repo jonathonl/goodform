@@ -145,6 +145,7 @@ namespace goodform
     // Array shortcuts:
     sub_form at(size_t index);
     sub_form at(size_t index, const variant& default_variant);
+    void for_each(const std::function<void(sub_form& element, size_t index)>& fn);
     // Object shortcuts:
     sub_form at(const std::string& key);
     sub_form at(const std::string& key, const variant& default_variant);
@@ -721,6 +722,11 @@ namespace goodform
   sub_form sub_form::at(size_t index, const variant& default_variant)
   {
     return this->array().at(index, default_variant);
+  }
+
+  void sub_form::for_each(const std::function<void(sub_form& element, size_t index)>& fn)
+  {
+    this->array().for_each(fn);
   }
 
   sub_form sub_form::at(const std::string& key)
