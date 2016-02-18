@@ -113,69 +113,257 @@ namespace goodform
     sub_form(const variant& v, error_message& errorMessage);
     sub_form(const sub_form& source);
 
+    /**
+     * Verifies that the current variant has a boolean value and otherwise sets an error.
+     *
+     * @return boolean_validator object.
+     */
     boolean_validator boolean();
-    //boolean_validator boolean(const error_message& customerror_message);
+
+    /**
+     * Verifies that the current variant has a boolean value and otherwise uses default passed as parameter.
+     *
+     * @param default_value The value to use if variant is not boolean.
+     * @return boolean_validator object.
+     */
     boolean_validator boolean(bool default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 8-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int8_t> int8();
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 8-bit integer and otherwise uses default passed as parameter.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int8_t> int8(std::int8_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 16-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int16_t> int16();
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 16-bit integer and otherwise uses default passed as parameter.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int16_t> int16(std::int16_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 32-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int32_t> int32();
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 32-bit integer and otherwise uses default passed as parameter.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int32_t> int32(std::int32_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 64-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int64_t> int64();
+
+    /**
+     * Verifies that the current variant's value can be represented as a signed 8-bit integer and otherwise uses default passed as parameter.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::int64_t> int64(std::int64_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a unsigned 8-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::uint8_t> uint8();
+
+    /**
+     * Verifies that the current variant's value can be represented as a unsigned 8-bit integer and otherwise uses default passed as parameter.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::uint8_t> uint8(std::uint8_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a unsigned 16-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::uint16_t> uint16();
+
+    /**
+    * Verifies that the current variant's value can be represented as a unsigned 16-bit integer and otherwise uses default passed as parameter.
+    *
+    * @param default_value The value to use if validation fails.
+    * @return A number_validator object is returned for further validation of the value.
+    */
     number_validator<std::uint16_t> uint16(std::uint16_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a unsigned 32-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::uint32_t> uint32();
+
+    /**
+    * Verifies that the current variant's value can be represented as a unsigned 32-bit integer and otherwise uses default passed as parameter.
+    *
+    * @param default_value The value to use if validation fails.
+    * @return A number_validator object is returned for further validation of the value.
+    */
     number_validator<std::uint32_t> uint32(std::uint32_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a unsigned 64-bit integer and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<std::uint64_t> uint64();
+
+    /**
+    * Verifies that the current variant's value can be represented as a unsigned 64-bit integer and otherwise uses default passed as parameter.
+    *
+    * @param default_value The value to use if validation fails.
+    * @return A number_validator object is returned for further validation of the value.
+    */
     number_validator<std::uint64_t> uint64(std::uint64_t default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a float and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<float> float32();
+
+    /**
+    * Verifies that the current variant's value can be represented as a float and otherwise uses default passed as parameter.
+    *
+    * @param default_value The value to use if validation fails.
+    * @return A number_validator object is returned for further validation of the value.
+    */
     number_validator<float> float32(float default_value);
+
+    /**
+     * Verifies that the current variant's value can be represented as a double and otherwise sets an error.
+     *
+     * @return A number_validator object is returned for further validation of the value.
+     */
     number_validator<double> float64();
+
+    /**
+    * Verifies that the current variant's value can be represented as a double and otherwise uses default passed as parameter.
+    *
+    * @param default_value The value to use if validation fails.
+    * @return A number_validator object is returned for further validation of the value.
+    */
     number_validator<double> float64(double default_value);
+
+    /**
+     * Verifies that the current variant has a string value and otherwise sets an error.
+     *
+     * @return A string_validator object is returned for further validation of the value.
+     */
     string_validator string();
+
+    /**
+    * Verifies that the current variant has a string value and otherwise uses default passed as parameter.
+    *
+    * @param default_value The value to use if validation fails.
+    * @return A string_validator object is returned for further validation of the value.
+    */
     string_validator string(const std::string& default_value);
+
+    /**
+     * Verifies that the current variant has an array value and otherwise sets an error.
+     *
+     * @return An array_validator object is returned for further validation of the value.
+     */
     array_validator array();
+
+    /**
+     * Verifies that the current variant has an array value and otherwise sets an error.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return An array_validator object is returned for further validation of the value.
+     */
     array_validator array(const std::vector<variant>& default_value);
+
+    /**
+     * Verifies that the current variant has a hash map value and otherwise sets an error.
+     *
+     * @return An object_validator object is returned for further validation of the value.
+     */
     object_validator object();
+
+    /**
+     * Verifies that the current variant has a hash map value and otherwise sets an error.
+     *
+     * @param default_value The value to use if validation fails.
+     * @return An object_validator object is returned for further validation of the value.
+     */
     object_validator object(const std::map<std::string, variant>& default_value);
-    // Array shortcuts:
+
+
+    /**
+     * Shortcut method for array_validator::at. An error is set if the current variant is not an array or the index does not exist.
+     *
+     * @param index The current variant's array position to access.
+     * @return A sub_form object is returned representing the variant at the index passed.
+     */
     sub_form at(size_t index);
+
+    /**
+     * Shortcut method for array_validator::at. The default_variant is used if the current variant is not an array or the index does not exist.
+     *
+     * @param index The current variant's array position to access.
+     * @param default_variant The variant to use if validation fails.
+     * @return A sub_form object is returned representing the variant at the index passed.
+     */
     sub_form at(size_t index, const variant& default_variant);
+
+    /**
+     * Shortcut method for array_validator::for_each. An error is set if the current variant is not an array or the index does not exist.
+     *
+     * @param fn A function used to validate each array element.
+     */
     void for_each(const std::function<void(sub_form& element, size_t index)>& fn);
-    // Object shortcuts:
+
+    /**
+     * Shortcut method for object_validator::at. An error is set if the current variant is not an object or the key does not exist.
+     *
+     * @param key The current variant's hash map key to access.
+     * @return A sub_form object is returned representing the variant at the key passed.
+     */
     sub_form at(const std::string& key);
+
+    /**
+     * Shortcut method for object_validator::at. The default_variant is used if the current variant is not an object or the key does not exist.
+     *
+     * @param key The current variant's hash map key to access.
+     * @param default_variant The variant to use if validation fails.
+     * @return A sub_form object is returned representing the variant at the key passed.
+     */
     sub_form at(const std::string& key, const variant& default_variant);
-
-//    boolean_validator b() { return this->boolean(); }
-//    boolean_validator b(const error_message& customerror_message) { return this->boolean(customerror_message); }
-//    boolean_validator b(bool default_value) { return this->boolean(default_value); }
-//
-//    number_validator<double> n() { return this->number(); }
-//    number_validator<double> n(const error_message& customerror_message) { return this->number(customerror_message); }
-//    number_validator<double> n(std::int64_t default_value) { return this->number(default_value); }
-
-//    number_validator<std::int64_t> i() { return this->integer(); }
-//    number_validator<std::int64_t> i(const error_message& customerror_message) { return this->integer(customerror_message); }
-//    number_validator<std::int64_t> i(std::int64_t default_value) { return this->integer(default_value); }
-//    number_validator<std::uint64_t> u() { return this->uinteger(); }
-//    number_validator<std::uint64_t> u(const error_message& customerror_message) { return this->uinteger(customerror_message); }
-//    number_validator<std::uint64_t> u(std::uint64_t default_value) { return this->uinteger(default_value); }
-//    number_validator<double> f() { return this->real(); }
-//    number_validator<double> f(const error_message& customerror_message) { return this->real(customerror_message); }
-//    number_validator<double> f(double default_value) { return this->real(default_value); }
-    string_validator s() { return this->string(); }
-    //string_validator s(const error_message& customerror_message) { return this->string(customerror_message); }
-    string_validator s(const std::string& default_value) { return this->string(default_value); }
-    array_validator a() { return this->array(); }
-    //array_validator a(const error_message& customerror_message) { return this->array(customerror_message); }
-    array_validator a(const std::vector<variant>& default_value) { return this->array(default_value); }
-    object_validator o() { return this->object(); }
-    //object_validator o(const error_message& customerror_message) { return this->object(customerror_message); }
-    object_validator o(const std::map<std::string, variant>& default_value) { return this->object(default_value); }
   };
   //======================================================================//
 
@@ -721,7 +909,7 @@ namespace goodform
 
   sub_form sub_form::at(size_t index, const variant& default_variant)
   {
-    return this->array().at(index, default_variant);
+    return this->array(std::vector<variant>()).at(index, default_variant);
   }
 
   void sub_form::for_each(const std::function<void(sub_form& element, size_t index)>& fn)
@@ -736,7 +924,7 @@ namespace goodform
 
   sub_form sub_form::at(const std::string& key, const variant& default_variant)
   {
-    return this->object().at(key, default_variant);
+    return this->object(std::map<std::string,variant>()).at(key, default_variant);
   }
   //======================================================================//
 
