@@ -27,6 +27,9 @@ namespace goodform
   public:
     boolean_validator(bool value);
 
+    /**
+     * @return Returns boolean value.
+     */
     bool val() const;
   };
   //======================================================================//
@@ -39,14 +42,45 @@ namespace goodform
     error_message& error_;
     const N value_;
   public:
-    number_validator(N value, error_message& errorMessage);
+    number_validator(N value, error_message& error_message);
     number_validator(const number_validator& source);
 
+    /**
+     * @return Returns numeric value of type N.
+     */
     N val() const;
-    number_validator gt(N greaterThan);
-    number_validator lt(N lessThan);
-    number_validator gte(N greaterOrEqualTo);
-    number_validator lte(N lessOrEqualTo);
+
+    /**
+     * Validates that value is greater than parameter.
+     *
+     * @param greater_than Numeric value to check against.
+     * @return Returns number_validator object for further validation.
+     */
+    number_validator gt(N greater_than);
+
+    /**
+     * Validates that value is less than than parameter.
+     *
+     * @param less_than Numeric value to check against.
+     * @return Returns number_validator object for further validation.
+     */
+    number_validator lt(N less_than);
+
+    /**
+     * Validates that value is greater than or equal to parameter.
+     *
+     * @param greater_or_equal_to Numeric value to check against.
+     * @return Returns number_validator object for further validation.
+     */
+    number_validator gte(N greater_or_equal_to);
+
+    /**
+     * Validates that value is less than or equal to parameter.
+     *
+     * @param less_or_equal_to Numeric value to check against.
+     * @return Returns number_validator object for further validation.
+     */
+    number_validator lte(N less_or_equal_to);
   };
   //======================================================================//
 
@@ -57,9 +91,19 @@ namespace goodform
     error_message& error_;
     const std::string& value_;
   public:
-    string_validator(const std::string& value, error_message& errorMessage);
+    string_validator(const std::string& value, error_message& error_message);
 
+    /**
+     * Matches string value against regular expression.
+     *
+     * @param expression Regular expression to match against.
+     * @return Returns string_validator object for further validation.
+     */
     string_validator match(std::regex expression);
+
+    /**
+    * @return Returns string value.
+    */
     const std::string& val() const;
   };
   //======================================================================//
@@ -73,13 +117,35 @@ namespace goodform
     error_message& error_;
     const std::vector<variant>& value_;
   public:
-    array_validator(const std::vector<variant>& value, error_message& errorMessage);
+    array_validator(const std::vector<variant>& value, error_message& error_message);
 
+    /**
+     * Retrieves variant at array index or sets error if index does not exist.
+     *
+     * @param index Position in array.
+     * @return Returns sub_form object for further validation.
+     */
     sub_form at(size_t index);
-    //sub_form at(size_t index, const error_message& customerror_message);
+
+    /**
+     * Retrieves variant at array index or default_variant if index does not exist.
+     *
+     * @param index Position in array.
+     * @param default_variant Variant to use if index does not exist.
+     * @return Returns sub_form object for further validation.
+     */
     sub_form at(size_t index, const variant& default_variant);
+
+    /**
+     * Iterates elements in array.
+     *
+     * @param fn Function used to validate each array element.
+     */
     void for_each(const std::function<void(sub_form& element, size_t index)>& fn);
 
+    /**
+     * @return Returns array value.
+     */
     const std::vector<variant>& val() const;
   };
   //======================================================================//
@@ -91,12 +157,28 @@ namespace goodform
     error_message& error_;
     const std::map<std::string, variant>& value_;
   public:
-    object_validator(const std::map<std::string, variant>& value, error_message& errorMessage);
+    object_validator(const std::map<std::string, variant>& value, error_message& error_message);
 
+    /**
+     * Retrieves variant at key or sets error if key does not exist.
+     *
+     * @param key Key in key-value map.
+     * @return Returns sub_form object for further validation.
+     */
     sub_form at(const std::string& key);
-    //sub_form at(const std::string& key, const error_message& customerror_message);
+
+    /**
+     * Retrieves variant at key or default_variant if index does not exist.
+     *
+     * @param key Key in key-value map.
+     * @param default_variant Variant to use if key does not exist.
+     * @return Returns sub_form object for further validation.
+     */
     sub_form at(const std::string& key, const variant& default_variant);
 
+    /**
+     * @return Returns object value.
+     */
     const std::map<std::string, variant>& val() const;
   };
   //======================================================================//
@@ -110,7 +192,7 @@ namespace goodform
   protected:
     const variant& variant_;
   public:
-    sub_form(const variant& v, error_message& errorMessage);
+    sub_form(const variant& v, error_message& error_message);
     sub_form(const sub_form& source);
 
     /**
@@ -309,14 +391,14 @@ namespace goodform
     array_validator array(const std::vector<variant>& default_value);
 
     /**
-     * Verifies that the current variant has a hash map value and otherwise sets an error.
+     * Verifies that the current variant has a key-value map value and otherwise sets an error.
      *
      * @return An object_validator object is returned for further validation of the value.
      */
     object_validator object();
 
     /**
-     * Verifies that the current variant has a hash map value and otherwise sets an error.
+     * Verifies that the current variant has a key-value map value and otherwise sets an error.
      *
      * @param default_value The value to use if validation fails.
      * @return An object_validator object is returned for further validation of the value.
@@ -351,7 +433,7 @@ namespace goodform
     /**
      * Shortcut method for object_validator::at. An error is set if the current variant is not an object or the key does not exist.
      *
-     * @param key The current variant's hash map key to access.
+     * @param key The current variant's key-value map key to access.
      * @return A sub_form object is returned representing the variant at the key passed.
      */
     sub_form at(const std::string& key);
@@ -359,7 +441,7 @@ namespace goodform
     /**
      * Shortcut method for object_validator::at. The default_variant is used if the current variant is not an object or the key does not exist.
      *
-     * @param key The current variant's hash map key to access.
+     * @param key The current variant's key-value map key to access.
      * @param default_variant The variant to use if validation fails.
      * @return A sub_form object is returned representing the variant at the key passed.
      */
