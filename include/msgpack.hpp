@@ -1,4 +1,4 @@
-#pragma 1
+#pragma once
 #ifndef GOODFORM_MSGPACK_HPP
 #define GOODFORM_MSGPACK_HPP
 
