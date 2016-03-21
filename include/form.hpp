@@ -1,9 +1,10 @@
 #ifndef GOODFORM_FORM_HPP
 #define GOODFORM_FORM_HPP
 
-#include <regex>
-
 #include "variant.hpp"
+
+#include <functional>
+#include <regex>
 
 //######################################################################//
 namespace goodform

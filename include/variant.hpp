@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <cstdint>
+#include <limits>
 
 //#define GOOODFORM_NO_CAST_OPERATOR_OVERLOADS
 
