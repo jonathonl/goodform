@@ -185,7 +185,7 @@ namespace goodform
     {
       if (!output.put(static_cast<char>(0xD9))
         || !output.put(static_cast<char>(0xFF & v.size()))
-        || !output.write(v.get<binary>().data(), v.size()))
+        || !output.write(v.get<std::string>().data(), v.size()))
       {
         ret = false;
       }
@@ -195,7 +195,7 @@ namespace goodform
       std::uint16_t sz_be(htons(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDA))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
-        || !output.write(v.get<binary>().data(), v.size()))
+        || !output.write(v.get<std::string>().data(), v.size()))
       {
         ret = false;
       }
@@ -205,7 +205,7 @@ namespace goodform
       std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDB))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
-        || !output.write(v.get<binary>().data(), v.size()))
+        || !output.write(v.get<std::string>().data(), v.size()))
       {
         ret = false;
       }
