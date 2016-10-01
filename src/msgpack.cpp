@@ -1,10 +1,5 @@
 #include "msgpack.hpp"
-
-#ifdef _WIN32
-#include <WinSock2.h>
-#else
-#include <arpa/inet.h>
-#endif
+#include "portable_endian.hpp"
 
 namespace goodform
 {
@@ -70,7 +65,7 @@ namespace goodform
     }
     else if (v.is<binary>() && v.size() <= 0xFFFF) // Bin 16
     {
-      std::uint16_t sz_be(htons(0xFFFF & v.size()));
+      std::uint16_t sz_be(htobe16(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xC5))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
         || !output.write(v.get<binary>().data(), v.size()))
@@ -80,7 +75,7 @@ namespace goodform
     }
     else if (v.is<binary>() && v.size() <= 0xFFFFFFFF) // Bin 32
     {
-      std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
+      std::uint32_t sz_be(htobe32(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xC6))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
         || !output.write(v.get<binary>().data(), v.size()))
@@ -96,7 +91,7 @@ namespace goodform
       {
         numeric_union32 nu;
         nu.f = static_cast<float>(dbl);
-        std::uint32_t be(htonl(nu.i));
+        std::uint32_t be(htobe32(nu.i));
         ret = output.put(static_cast<char>(0xCA)).good();
         if (ret)
           ret = output.write((char*)&be, sizeof(be)).good();
@@ -105,7 +100,7 @@ namespace goodform
       {
         numeric_union64 nu;
         nu.f = dbl;
-        std::uint64_t be(htonll(nu.i));
+        std::uint64_t be(htobe64(nu.i));
         ret = output.put(static_cast<char>(0xCB)).good();
         if (ret)
           ret = output.write((char*)&be, sizeof(be)).good();
@@ -131,7 +126,7 @@ namespace goodform
     else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint16_t>::max()) // Uint 16
     {
       std::uint16_t val = static_cast<std::uint16_t>(v.get<std::uint64_t>());
-      std::uint16_t be(htons(val));
+      std::uint16_t be(htobe16(val));
       ret = output.put(static_cast<char>(0xCD)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
@@ -139,14 +134,14 @@ namespace goodform
     else if (v.type() == variant_type::unsigned_integer && v.get<std::uint64_t>() <= std::numeric_limits<std::uint32_t>::max()) // Uint 32
     {
       std::uint32_t val = static_cast<std::uint32_t>(v.get<std::uint64_t>());
-      std::uint32_t be(htonl(val));
+      std::uint32_t be(htobe32(val));
       ret = output.put(static_cast<char>(0xCE)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
     else if (v.type() == variant_type::unsigned_integer) // Uint 64
     {
-      std::uint64_t be(htonll(v.get<std::uint64_t>()));
+      std::uint64_t be(htobe64(v.get<std::uint64_t>()));
       ret = output.put(static_cast<char>(0xCF)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
@@ -161,7 +156,7 @@ namespace goodform
     else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int16_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int16_t>::max()) // Int 16
     {
       std::int16_t val = static_cast<std::int16_t>(v.get<std::int64_t>());
-      std::int16_t be(htons(val));
+      std::int16_t be(htobe16(val));
       ret = output.put(static_cast<char>(0xD1)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
@@ -169,14 +164,14 @@ namespace goodform
     else if (v.type() == variant_type::signed_integer && v.get<std::int64_t>() >= std::numeric_limits<std::int32_t>::min() && v.get<std::int64_t>() <= std::numeric_limits<std::int32_t>::max()) // Int 32
     {
       std::int32_t val = static_cast<std::int32_t>(v.get<std::int64_t>());
-      std::int32_t be(htonl(val));
+      std::int32_t be(htobe32(val));
       ret = output.put(static_cast<char>(0xD2)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
     }
     else if (v.type() == variant_type::signed_integer) // Int 64
     {
-      std::int64_t be(htonll(v.get<std::int64_t>()));
+      std::int64_t be(htobe64(v.get<std::int64_t>()));
       ret = output.put(static_cast<char>(0xD3)).good();
       if (ret)
         ret = output.write((char*)&be, sizeof(be)).good();
@@ -192,7 +187,7 @@ namespace goodform
     }
     else if (v.is<std::string>() && v.size() <= 0xFFFF) // str 16
     {
-      std::uint16_t sz_be(htons(0xFFFF & v.size()));
+      std::uint16_t sz_be(htobe16(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDA))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
         || !output.write(v.get<std::string>().data(), v.size()))
@@ -202,7 +197,7 @@ namespace goodform
     }
     else if (v.is<std::string>() && v.size() <= 0xFFFFFFFF) // str 32
     {
-      std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
+      std::uint32_t sz_be(htobe32(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDB))
         || !output.write((char*)(&sz_be), sizeof(sz_be))
         || !output.write(v.get<std::string>().data(), v.size()))
@@ -212,7 +207,7 @@ namespace goodform
     }
     else if (v.is<array>() && v.size() <= 0xFFFF) // array 16
     {
-      std::uint16_t sz_be(htons(0xFFFF & v.size()));
+      std::uint16_t sz_be(htobe16(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDC))
         || !output.write((char*)(&sz_be), sizeof(sz_be)))
       {
@@ -226,7 +221,7 @@ namespace goodform
     }
     else if (v.is<array>() && v.size() <= 0xFFFFFFFF) // array 32
     {
-      std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
+      std::uint32_t sz_be(htobe32(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDD))
         || !output.write((char*)(&sz_be), sizeof(sz_be)))
       {
@@ -240,7 +235,7 @@ namespace goodform
     }
     else if (v.is<object>() && v.size() <= 0xFFFF) // map 16
     {
-      std::uint16_t sz_be(htons(0xFFFF & v.size()));
+      std::uint16_t sz_be(htobe16(0xFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDE))
         || !output.write((char*)(&sz_be), sizeof(sz_be)))
       {
@@ -261,7 +256,7 @@ namespace goodform
     }
     else if (v.is<object>() && v.size() <= 0xFFFFFFFF) // map 32
     {
-      std::uint32_t sz_be(htonl(0xFFFFFFFF & v.size()));
+      std::uint32_t sz_be(htobe32(0xFFFFFFFF & v.size()));
       if (!output.put(static_cast<char>(0xDF))
         || !output.write((char*)(&sz_be), sizeof(sz_be)))
       {
@@ -367,7 +362,7 @@ namespace goodform
         ret = input.read((char*)&sz_be, sizeof(sz_be)).good();
         if (ret)
         {
-          goodform::binary b(ntohs(sz_be));
+          goodform::binary b(be16toh(sz_be));
           if (!input.read(b.data(), b.size()).good())
             ret = false;
           else
@@ -380,7 +375,7 @@ namespace goodform
         ret = input.read((char*)&sz_be, sizeof(sz_be)).good();
         if (ret)
         {
-          goodform::binary b(ntohl(sz_be));
+          goodform::binary b(be32toh(sz_be));
           if (!input.read(b.data(), b.size()).good())
             ret = false;
           else
@@ -394,7 +389,7 @@ namespace goodform
         if (ret)
         {
           numeric_union32 u;
-          u.i = ntohl(be);
+          u.i = be32toh(be);
           v = u.f;
         }
       }
@@ -405,7 +400,7 @@ namespace goodform
         if (ret)
         {
           numeric_union64 u;
-          u.i = ntohll(be);
+          u.i = be64toh(be);
           v = u.f;
         }
       }
@@ -422,7 +417,7 @@ namespace goodform
         ret = input.read((char*)&be, sizeof(be)).good();
         if (ret)
         {
-          std::uint16_t val(ntohs(be));
+          std::uint16_t val(be16toh(be));
           v = val;
         }
       }
@@ -432,7 +427,7 @@ namespace goodform
         ret = input.read((char*)&be, sizeof(be)).good();
         if (ret)
         {
-          std::uint32_t val(ntohl(be));
+          std::uint32_t val(be32toh(be));
           v = val;
         }
       }
@@ -442,7 +437,7 @@ namespace goodform
         ret = input.read((char*)&be, sizeof(be)).good();
         if (ret)
         {
-          std::uint64_t val(ntohll(be));
+          std::uint64_t val(be64toh(be));
           v = val;
         }
       }
@@ -459,7 +454,7 @@ namespace goodform
         ret = input.read((char*)&be, sizeof(be)).good();
         if (ret)
         {
-          std::int16_t val(ntohs(be));
+          std::int16_t val(be16toh(be));
           v = val;
         }
       }
@@ -469,7 +464,7 @@ namespace goodform
         ret = input.read((char*)&be, sizeof(be)).good();
         if (ret)
         {
-          std::int32_t val(ntohl(be));
+          std::int32_t val(be32toh(be));
           v = val;
         }
       }
@@ -479,7 +474,7 @@ namespace goodform
         ret = input.read((char*)&be, sizeof(be)).good();
         if (ret)
         {
-          std::int64_t val(ntohll(be));
+          std::int64_t val(be64toh(be));
           v = val;
         }
       }
@@ -504,7 +499,7 @@ namespace goodform
         if (ret)
         {
           std::string s;
-          s.resize(ntohs(sz_be));
+          s.resize(be16toh(sz_be));
           if (!input.read(&s[0], s.size()).good())
             ret = false;
           else
@@ -518,7 +513,7 @@ namespace goodform
         if (ret)
         {
           std::string s;
-          s.resize(ntohl(sz_be));
+          s.resize(be32toh(sz_be));
           if (!input.read(&s[0], s.size()).good())
             ret = false;
           else
@@ -531,7 +526,7 @@ namespace goodform
         ret = input.read((char*)&sz_be, sizeof(sz_be)).good();
         if (ret)
         {
-          goodform::array a(ntohs(sz_be));
+          goodform::array a(be16toh(sz_be));
           for (size_t i = 0; ret && i < a.size(); ++i)
             ret = msgpack::deserialize(input, a[i]);
           v = std::move(a);
@@ -543,7 +538,7 @@ namespace goodform
         ret = input.read((char*)&sz_be, sizeof(sz_be)).good();
         if (ret)
         {
-          goodform::array a(ntohl(sz_be));
+          goodform::array a(be32toh(sz_be));
           for (size_t i = 0; ret && i < a.size(); ++i)
             ret = msgpack::deserialize(input, a[i]);
           v = std::move(a);
@@ -556,7 +551,7 @@ namespace goodform
         if (ret)
         {
           v = variant_type::object;
-          std::uint16_t sz(ntohs(sz_be));
+          std::uint16_t sz(be16toh(sz_be));
           for (size_t i = 0; ret && i < sz; ++i)
           {
             variant key;
@@ -574,7 +569,7 @@ namespace goodform
         if (ret)
         {
           v = variant_type::object;
-          std::uint32_t sz(ntohl(sz_be));
+          std::uint32_t sz(be32toh(sz_be));
           for (size_t i = 0; ret && i < sz; ++i)
           {
             variant key;

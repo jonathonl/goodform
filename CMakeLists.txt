@@ -14,7 +14,8 @@ set(HEADER_FILES
   include/form.hpp
   include/variant.hpp
   include/msgpack.hpp
-  include/json.hpp)
+  include/json.hpp
+  include/portable_endian.hpp)
 
 set(SOURCE_FILES
   src/variant.cpp
