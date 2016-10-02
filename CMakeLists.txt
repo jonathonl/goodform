@@ -22,8 +22,7 @@ set(SOURCE_FILES
   src/msgpack.cpp
   src/json.cpp)
 
-add_library(goodform SHARED ${SOURCE_FILES} ${HEADER_FILES})
+add_library(goodform ${SOURCE_FILES} ${HEADER_FILES})
 
-add_library(goodform-static STATIC ${SOURCE_FILES} ${HEADER_FILES})
-
-add_executable(variant-test tests/variant-test.cpp ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(variant-test tests/variant-test.cpp)
+target_link_libraries(variant-test goodform)
