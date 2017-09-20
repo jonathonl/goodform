@@ -26,4 +26,4 @@ add_library(goodform SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 add_library(goodform-static STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
-add_executable(variant-test tests/variant-test.cpp ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(variant-test tests/variant-test.cpp tests/include_form.cpp ${SOURCE_FILES} ${HEADER_FILES})
