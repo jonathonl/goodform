@@ -3,10 +3,10 @@
 #include <limits>
 #include <list>
 
-#include "variant.hpp"
-#include "form.hpp"
-#include "msgpack.hpp"
-#include "json.hpp"
+#include "goodform/variant.hpp"
+#include "goodform/form.hpp"
+#include "goodform/msgpack.hpp"
+#include "goodform/json.hpp"
 
 #include <cmath>
 
