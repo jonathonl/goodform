@@ -18,6 +18,7 @@ set(HEADER_FILES
   include/portable_endian.hpp)
 
 set(SOURCE_FILES
+  src/form.cpp
   src/variant.cpp
   src/msgpack.cpp
   src/json.cpp)
@@ -26,4 +27,4 @@ add_library(goodform SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 add_library(goodform-static STATIC ${SOURCE_FILES} ${HEADER_FILES})
 
-add_executable(variant-test tests/variant-test.cpp ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(variant-test tests/variant-test.cpp tests/include_form.cpp ${SOURCE_FILES} ${HEADER_FILES})
