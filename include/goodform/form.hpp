@@ -40,8 +40,8 @@ namespace goodform
   class number_validator
   {
   private:
-    error_message& error_;
     const N value_;
+    error_message& error_;
   public:
     number_validator(N value, error_message& error_message);
     number_validator(const number_validator& source);
@@ -89,8 +89,8 @@ namespace goodform
   class string_validator
   {
   private:
-    error_message& error_;
     const std::string& value_;
+    error_message& error_;
   public:
     string_validator(const std::string& value, error_message& error_message);
 
@@ -187,11 +187,11 @@ namespace goodform
   //======================================================================//
   class sub_form
   {
+  protected:
+    const variant& variant_;
   private:
     error_message& error_;
     //static double convert_to_double(const variant& v);
-  protected:
-    const variant& variant_;
   public:
     sub_form(const variant& v, error_message& error_message);
     sub_form(const sub_form& source);
@@ -558,7 +558,7 @@ namespace goodform
   //======================================================================//
 
   //======================================================================//
-  array_validator::array_validator(const std::vector<variant>& value, error_message& errorMessage) : value_(value), error_(errorMessage)
+  array_validator::array_validator(const std::vector<variant>& value, error_message& errorMessage) : error_(errorMessage),  value_(value)
   {
 
   }
@@ -602,7 +602,7 @@ namespace goodform
   //======================================================================//
 
   //======================================================================//
-  object_validator::object_validator(const std::map<std::string,variant>& value, error_message& errorMessage) : value_(value), error_(errorMessage)
+  object_validator::object_validator(const std::map<std::string,variant>& value, error_message& errorMessage) : error_(errorMessage),  value_(value)
   {
 
   }
@@ -1012,7 +1012,7 @@ namespace goodform
   //======================================================================//
 
   //======================================================================//
-  form::form(const variant& v) : error_(""), sub_form(v, error_)
+  form::form(const variant& v) : sub_form(v, error_),  error_("")
   {
 
   }

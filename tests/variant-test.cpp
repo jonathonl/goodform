@@ -3,15 +3,15 @@
 #include <limits>
 #include <list>
 
-#include "variant.hpp"
-#include "form.hpp"
-#include "msgpack.hpp"
-#include "json.hpp"
+#include "goodform/variant.hpp"
+#include "goodform/form.hpp"
+#include "goodform/msgpack.hpp"
+#include "goodform/json.hpp"
 
 #include <cmath>
 
 
-int main(int argc, char** argv)
+int main(int argc [[maybe_unused]], char** argv [[maybe_unused]])
 {
   {
     bool passed = false;
