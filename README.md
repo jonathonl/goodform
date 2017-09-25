@@ -1,7 +1,7 @@
 # GoodForm
 Form validation library. Includes MsgPack and JSON serializer/deserializer.
 
-#MsgPack Usage
+## MsgPack Usage
 ```c++
 std::stringstream ss;
 goodform::variant var, var2;
@@ -30,8 +30,9 @@ if (form.is_good())
   std::cout << "{ \"compact\": " << std::boolalpha << mpack.compact << ", \"schema\": " << mpack.schema << " }" << std::endl;
 }
 ```
+- - - -
 
-#JSON Usage
+## JSON Usage
 ```c++
 goodform::variant var;
 std::stringstream ss;
@@ -84,3 +85,5 @@ else
   // Handle error.
 }
 ```
+## Limitations
+- complex keys are out of scope with this library (key can be only strings in msgpack)
