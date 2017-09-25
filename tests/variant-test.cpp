@@ -11,7 +11,7 @@
 #include <cmath>
 
 
-int main(int argc, char** argv)
+int main(int argc [[maybe_unused]], char** argv [[maybe_unused]])
 {
   {
     bool passed = false;

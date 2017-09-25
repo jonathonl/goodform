@@ -161,7 +161,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(std::nullptr_t value)
+  variant::variant(std::nullptr_t value [[maybe_unused]] )   
   {
     this->type_ = variant_type::null;
   }
@@ -358,7 +358,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(std::nullptr_t value)
+  variant& variant::operator=(std::nullptr_t value [[maybe_unused]])
   {
     this->destroy();
     this->type_ = variant_type::null;
