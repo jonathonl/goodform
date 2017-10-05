@@ -17,6 +17,7 @@ set(HEADER_FILES
   include/portable_endian.hpp)
 
 set(SOURCE_FILES
+  src/form.cpp
   src/variant.cpp
   src/msgpack.cpp
   src/json.cpp
