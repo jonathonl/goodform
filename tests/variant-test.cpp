@@ -13,12 +13,27 @@
 
 int main(int argc, char** argv)
 {
+
+  std::any a = std::string("foobar");
+
+  std::cout << std::any_cast<const std::string&>(a) << std::endl;
+
+  const std::string& b = std::any_cast<const std::string&>(a);
+  std::cout << b << std::endl;
+
+
+
+
+
+
+
+
   {
     bool passed = false;
 
     std::stringstream ss;
-    goodform::variant var, var2;
-    var = goodform::object
+    goodform::any var, var2;
+    var = goodform::object_t
       {
         {"compact", true},
         {"schema", 0}
@@ -36,7 +51,7 @@ int main(int argc, char** argv)
     } mpack;
 
     mpack.compact = form.at("compact").boolean().val();
-    mpack.schema = form.at("schema").uint32().val();
+    mpack.schema = form.at("schema").int32().val();
 
     if (form.is_good())
     {
@@ -48,7 +63,7 @@ int main(int argc, char** argv)
   }
 
   {
-    goodform::variant var;
+    goodform::any var;
     std::stringstream ss;
     ss << "{" << std::endl
       << "\"first_name\":\"John\", // This is a comment" << std::endl
@@ -63,6 +78,9 @@ int main(int argc, char** argv)
     goodform::json::deserialize(ss, var);
 
     goodform::form form(var);
+
+    auto fn = goodform::get<std::string>(goodform::get<goodform::object_t>(var).at("first_name"));
+    std::cout << fn << std::endl;
 
     struct
     {

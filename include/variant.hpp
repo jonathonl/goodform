@@ -7,6 +7,11 @@
 #include <cstdint>
 #include <limits>
 
+#if __has_include("any")
+#include <any>
+#endif
+
+
 //#define GOOODFORM_NO_CAST_OPERATOR_OVERLOADS
 
 #ifdef GOOODFORM_EXPLICIT_CONSTRUCTORS
@@ -19,12 +24,16 @@
 namespace goodform
 {
   //----------------------------------------------------------------------//
-  class variant;
-  typedef std::vector<char> binary;
-  typedef std::map<std::string, goodform::variant> object;
-  typedef std::vector<goodform::variant> array;
+#if !__has_include("any")
+  class any;
+#else
+  typedef std::any any;
+#endif
+  typedef std::vector<char> binary_t;
+  typedef std::map<std::string, any> object_t;
+  typedef std::vector<any> array_t;
   //----------------------------------------------------------------------//
-
+#if !__has_include("any")
   //----------------------------------------------------------------------//
   enum class variant_type
   {
@@ -62,9 +71,9 @@ namespace goodform
       std::int64_t signed_integer_;
       double floating_point_;
       std::string string_;
-      binary binary_;
-      array array_;
-      object object_;
+      binary_t binary_;
+      array_t array_;
+      object_t object_;
       data_union(){}
       ~data_union(){}
     };
@@ -102,13 +111,13 @@ namespace goodform
     GOOODFORM_EXPLICIT_MACRO variant(const char*const value);
     GOOODFORM_EXPLICIT_MACRO variant(const char*const value, std::size_t size);
     GOOODFORM_EXPLICIT_MACRO variant(std::string&& value);
-    GOOODFORM_EXPLICIT_MACRO variant(binary&& value);
-    GOOODFORM_EXPLICIT_MACRO variant(array&& value);
-    GOOODFORM_EXPLICIT_MACRO variant(object&& value);
+    GOOODFORM_EXPLICIT_MACRO variant(binary_t&& value);
+    GOOODFORM_EXPLICIT_MACRO variant(array_t&& value);
+    GOOODFORM_EXPLICIT_MACRO variant(object_t&& value);
     GOOODFORM_EXPLICIT_MACRO variant(const std::string& value);
-    GOOODFORM_EXPLICIT_MACRO variant(const binary& value);
-    GOOODFORM_EXPLICIT_MACRO variant(const array& value);
-    GOOODFORM_EXPLICIT_MACRO variant(const object& value);
+    GOOODFORM_EXPLICIT_MACRO variant(const binary_t& value);
+    GOOODFORM_EXPLICIT_MACRO variant(const array_t& value);
+    GOOODFORM_EXPLICIT_MACRO variant(const object_t& value);
     GOOODFORM_EXPLICIT_MACRO variant(variant_type type);
     ~variant();
     //----------------------------------------------------------------------//
@@ -132,13 +141,13 @@ namespace goodform
 
     variant& operator=(const char* value);
     variant& operator=(std::string&& value);
-    variant& operator=(binary&& value);
-    variant& operator=(array&& value);
-    variant& operator=(object&& value);
+    variant& operator=(binary_t&& value);
+    variant& operator=(array_t&& value);
+    variant& operator=(object_t&& value);
     variant& operator=(const std::string& value);
-    variant& operator=(const binary& value);
-    variant& operator=(const array& value);
-    variant& operator=(const object& value);
+    variant& operator=(const binary_t& value);
+    variant& operator=(const array_t& value);
+    variant& operator=(const object_t& value);
     variant& operator=(variant_type type);
     //----------------------------------------------------------------------//
 
@@ -196,14 +205,84 @@ namespace goodform
     explicit operator std::uint64_t() const;
     explicit operator double() const;
     explicit operator const std::string&() const;
-    explicit operator const goodform::binary&() const;
-    explicit operator const goodform::array&() const;
-    explicit operator const goodform::object&() const;
+    explicit operator const goodform::binary_t&() const;
+    explicit operator const goodform::array_t&() const;
+    explicit operator const goodform::object_t&() const;
     //----------------------------------------------------------------------//
 #endif
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
   };
   //======================================================================//
+#endif
+
+//#if defined(__GNUC__) && (__GNUC__ >= 5)
+//# if __GNUC__ == 7
+//  typedef std::any any;
+//# else
+//  typedef std::experimental::any any;
+//  template<typename T>
+//  constexpr auto any_cast = std::experimental::any_cast<T>;
+//# endif
+  template <typename T>
+  bool is(const any& v)
+  {
+#if __has_include("any")
+    return v.type() == typeid(T);
+#else
+    return v.is<T>();
+#endif
+  }
+
+//  template <typename T>
+//  bool can_be(const any& v);
+
+  template <typename T>
+  const T& get(const any& v)
+  {
+#if __has_include("any")
+    return std::any_cast<const T&>(v);
+#else
+    return v.get<T>();
+#endif
+  }
+
+  template <typename T>
+  T& get(any& v)
+  {
+#if __has_include("any")
+    return std::any_cast<T&>(v);
+#else
+    return v.get<T>();
+#endif
+  }
+
+  template <typename T>
+  bool get(const any& v, T& dest)
+  {
+    if (is<T>(v))
+    {
+      dest = get<T>(v);
+      return true;
+    }
+    return false;
+  }
+
+
+
+//#else
+//  typedef variant any;
+//  template <typename T>
+//  bool is(const any& v) { return v.is<T>(); }
+//
+//  template <typename T>
+//  bool can_be(const any& v) { return v.can_be<T>(); }
+//
+//  template <typename T>
+//  const T& get(const any& v) { return v.get<T>(); }
+//
+//  template <typename T>
+//  bool get(const any& v, T& dest) { return v.get<T>(dest); }
+//#endif
 }
 //######################################################################//
 #endif //GOODFORM_VARIANT_HPP

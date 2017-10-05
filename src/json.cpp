@@ -1,7 +1,7 @@
 
 #include <sstream>
-#include <codecvt>
 #include <locale>
+#include <codecvt>
 
 #include "json.hpp"
 
@@ -39,12 +39,12 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  void json::stringify_object(const variant& v, std::ostream& output)
+  void json::stringify_object(const any& v, std::ostream& output)
   {
     output << "{";
-    for (auto it = v.get<goodform::object>().begin(); it != v.get<goodform::object>().end(); ++it)
+    for (auto it = get<goodform::object_t>(v).begin(); it != get<goodform::object_t>(v).end(); ++it)
     {
-      if (it != v.get<goodform::object>().begin())
+      if (it != get<goodform::object_t>(v).begin())
         output << ",";
       write_string(it->first, output);
       output << ":";
@@ -55,13 +55,13 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  void json::stringify_array(const variant& v, std::ostream& output)
+  void json::stringify_array(const any& v, std::ostream& output)
   {
     output << "[";
-    for (auto it = v.get<goodform::array>().begin(); it != v.get<goodform::array>().end(); ++it)
+    for (auto it = get<goodform::array_t>(v).begin(); it != get<goodform::array_t>(v).end(); ++it)
     {
 
-      if (it != v.get<goodform::array>().begin())
+      if (it != get<goodform::array_t>(v).begin())
         output << ",";
       serialize(*it, output);
     }
@@ -70,28 +70,28 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  void json::serialize(const variant& v, std::ostream& output)
+  void json::serialize(const any& v, std::ostream& output)
   {
-    if (v.is<std::nullptr_t>())
+    if (is<std::nullptr_t>(v))
     {
       output << "null";
     }
-    else if (v.is<bool>())
+    else if (is<bool>(v))
     {
-      output << (v.get<bool>() ? "true":"false");
+      output << (get<bool>(v) ? "true":"false");
     }
-    else if (v.type() == variant_type::signed_integer) output << v.get<std::int64_t>();
-    else if (v.type() == variant_type::unsigned_integer) output << v.get<std::uint64_t>();
-    else if (v.type() == variant_type::floating_point) output << v.get<double>();
-    else if (v.is<std::string>())
+    else if (is<std::int64_t>(v)) output << get<std::int64_t>(v);
+    else if (is<std::uint64_t>(v)) output << get<std::uint64_t>(v);
+    else if (is<double>(v)) output << get<double>(v);
+    else if (is<std::string>(v))
     {
-      write_string(v.get<std::string>(), output);
+      write_string(get<std::string>(v), output);
     }
-    else if (v.is<goodform::array>())
+    else if (is<goodform::array_t>(v))
     {
       stringify_array(v, output);
     }
-    else if (v.is<goodform::object>())
+    else if (is<goodform::object_t>(v))
     {
       stringify_object(v, output);
     }
@@ -190,9 +190,9 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  bool json::parse_object(std::istream& input, variant& v)
+  bool json::parse_object(std::istream& input, any& v)
   {
-    v = variant_type::object;
+    v = object_t();
     char c = (char)input.get();
     bool closingBraceFound = false;
     if (c == '{')
@@ -216,9 +216,9 @@ namespace goodform
               input.seekg(1, std::ios::cur);
               strip_white_space(input);
 
-              variant value;
+              any value;
               parseError = !deserialize(input, value);
-              v[key] = std::move(value);
+              get<object_t>(v)[key] = std::move(value);
 
               if (!parseError)
               {
@@ -237,9 +237,9 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  bool json::parse_array(std::istream& input, variant& v)
+  bool json::parse_array(std::istream& input, any& v)
   {
-    v = variant_type::array;
+    v = goodform::array_t();
     char c = (char)input.get();
     bool closingBraceFound = false;
     if (c == '[')
@@ -254,9 +254,9 @@ namespace goodform
         }
         else
         {
-          variant elem;
+          any elem;
           parseError = !deserialize(input, elem);
-          v.push(std::move(elem));
+          get<goodform::array_t>(v).push_back(std::move(elem));
           if (!parseError)
           {
             strip_white_space(input);
@@ -330,7 +330,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  bool json::deserialize(std::istream& input, variant& v)
+  bool json::deserialize(std::istream& input, any& v)
   {
     bool ret = false;
 
