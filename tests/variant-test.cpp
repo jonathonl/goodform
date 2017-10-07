@@ -13,21 +13,6 @@
 
 int main(int argc, char** argv)
 {
-
-  std::any a = std::string("foobar");
-
-  std::cout << std::any_cast<const std::string&>(a) << std::endl;
-
-  const std::string& b = std::any_cast<const std::string&>(a);
-  std::cout << b << std::endl;
-
-
-
-
-
-
-
-
   {
     bool passed = false;
 
@@ -78,9 +63,6 @@ int main(int argc, char** argv)
     goodform::json::deserialize(ss, var);
 
     goodform::form form(var);
-
-    auto fn = goodform::get<std::string>(goodform::get<goodform::object_t>(var).at("first_name"));
-    std::cout << fn << std::endl;
 
     struct
     {

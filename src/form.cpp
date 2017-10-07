@@ -197,7 +197,7 @@ namespace goodform
   number_validator<std::int8_t> sub_form::int8()
   {
     std::int8_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int8_t");
     return number_validator<std::int8_t>(val, this->error_);
   }
@@ -205,7 +205,7 @@ namespace goodform
   number_validator<std::int8_t> sub_form::int8(std::int8_t default_value)
   {
     std::int8_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::int8_t>(val, this->error_);
     else
       return number_validator<std::int8_t>(default_value, this->error_);
@@ -214,7 +214,7 @@ namespace goodform
   number_validator<std::int16_t> sub_form::int16()
   {
     std::int16_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int16_t");
     return number_validator<std::int16_t>(val, this->error_);
   }
@@ -222,7 +222,7 @@ namespace goodform
   number_validator<std::int16_t> sub_form::int16(std::int16_t default_value)
   {
     std::int16_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::int16_t>(val, this->error_);
     else
       return number_validator<std::int16_t>(default_value, this->error_);
@@ -231,7 +231,7 @@ namespace goodform
   number_validator<std::int32_t> sub_form::int32()
   {
     std::int32_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int32_t");
     return number_validator<std::int32_t>(val, this->error_);
   }
@@ -239,7 +239,7 @@ namespace goodform
   number_validator<std::int32_t> sub_form::int32(std::int32_t default_value)
   {
     std::int8_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::int32_t>(val, this->error_);
     else
       return number_validator<std::int32_t>(default_value, this->error_);
@@ -248,7 +248,7 @@ namespace goodform
   number_validator<std::int64_t> sub_form::int64()
   {
     std::int64_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int64_t");
     return number_validator<std::int64_t>(val, this->error_);
   }
@@ -256,7 +256,7 @@ namespace goodform
   number_validator<std::int64_t> sub_form::int64(std::int64_t default_value)
   {
     std::int64_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::int64_t>(val, this->error_);
     else
       return number_validator<std::int64_t>(default_value, this->error_);
@@ -265,7 +265,7 @@ namespace goodform
   number_validator<std::uint8_t> sub_form::uint8()
   {
     std::uint8_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint8_t");
     return number_validator<std::uint8_t>(val, this->error_);
   }
@@ -273,7 +273,7 @@ namespace goodform
   number_validator<std::uint8_t> sub_form::uint8(std::uint8_t default_value)
   {
     std::uint8_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint8_t>(val, this->error_);
     else
       return number_validator<std::uint8_t>(default_value, this->error_);
@@ -282,7 +282,7 @@ namespace goodform
   number_validator<std::uint16_t> sub_form::uint16()
   {
     std::uint16_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint16_t");
     return number_validator<std::uint16_t>(val, this->error_);
   }
@@ -290,7 +290,7 @@ namespace goodform
   number_validator<std::uint16_t> sub_form::uint16(std::uint16_t default_value)
   {
     std::uint16_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint16_t>(val, this->error_);
     else
       return number_validator<std::uint16_t>(default_value, this->error_);
@@ -299,7 +299,7 @@ namespace goodform
   number_validator<std::uint32_t> sub_form::uint32()
   {
     std::uint32_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint32_t");
     return number_validator<std::uint32_t>(val, this->error_);
   }
@@ -307,7 +307,7 @@ namespace goodform
   number_validator<std::uint32_t> sub_form::uint32(std::uint32_t default_value)
   {
     std::uint32_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint32_t>(val, this->error_);
     else
       return number_validator<std::uint32_t>(default_value, this->error_);
@@ -316,7 +316,7 @@ namespace goodform
   number_validator<std::uint64_t> sub_form::uint64()
   {
     std::uint64_t val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint64_t");
     return number_validator<std::uint64_t>(val, this->error_);
   }
@@ -324,7 +324,7 @@ namespace goodform
   number_validator<std::uint64_t> sub_form::uint64(std::uint64_t default_value)
   {
     std::uint64_t val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint64_t>(val, this->error_);
     else
       return number_validator<std::uint64_t>(default_value, this->error_);
@@ -333,7 +333,7 @@ namespace goodform
   number_validator<float> sub_form::float32()
   {
     float val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A float32");
     return number_validator<float>(val, this->error_);
   }
@@ -341,7 +341,7 @@ namespace goodform
   number_validator<float> sub_form::float32(float default_value)
   {
     float val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<float>(val, this->error_);
     else
       return number_validator<float>(default_value, this->error_);
@@ -350,7 +350,7 @@ namespace goodform
   number_validator<double> sub_form::float64()
   {
     double val;
-    if (!get(this->variant_, val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A float64");
     return number_validator<double>(val, this->error_);
   }
@@ -358,7 +358,7 @@ namespace goodform
   number_validator<double> sub_form::float64(double default_value)
   {
     double val;
-    if (get(this->variant_, val))
+    if (convert(this->variant_, val))
       return number_validator<double>(val, this->error_);
     else
       return number_validator<double>(default_value, this->error_);

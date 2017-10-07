@@ -6,6 +6,7 @@
 #include <string>
 #include <cstdint>
 #include <limits>
+#include <cmath>
 
 #if __has_include("any")
 #include <any>
@@ -233,9 +234,6 @@ namespace goodform
 #endif
   }
 
-//  template <typename T>
-//  bool can_be(const any& v);
-
   template <typename T>
   const T& get(const any& v)
   {
@@ -267,7 +265,81 @@ namespace goodform
     return false;
   }
 
+  namespace detail
+  {
+    // https://stackoverflow.com/a/17251989/5948773
+    template <typename IntT, typename ValT>
+    bool can_int_fit_value(const ValT value)
+    {
+      const intmax_t int_type_min = intmax_t(std::numeric_limits<IntT>::min());
+      const intmax_t val_type_min = intmax_t(std::numeric_limits<ValT>::min());
+      const uintmax_t int_type_max = uintmax_t(std::numeric_limits<IntT>::max());
+      const uintmax_t val_type_max = uintmax_t(std::numeric_limits<ValT>::max());
+      return !( (int_type_min > val_type_min && value < static_cast<ValT>(int_type_min)) || (int_type_max < val_type_max && value > static_cast<ValT>(int_type_max)) );
+    }
+  }
 
+  template <typename T>
+  bool can_be(const any& v)
+  {
+    if (std::is_integral<T>::value)
+    {
+      if (is<std::int8_t>(v)) return detail::can_int_fit_value<T>(get<std::int8_t>(v));
+      if (is<std::int16_t>(v)) return detail::can_int_fit_value<T>(get<std::int16_t>(v));
+      if (is<std::int32_t>(v)) return detail::can_int_fit_value<T>(get<std::int32_t>(v));
+      if (is<std::int64_t>(v)) return detail::can_int_fit_value<T>(get<std::int64_t>(v));
+      if (is<std::uint8_t>(v)) return detail::can_int_fit_value<T>(get<std::uint8_t>(v));
+      if (is<std::uint16_t>(v)) return detail::can_int_fit_value<T>(get<std::uint16_t>(v));
+      if (is<std::uint32_t>(v)) return detail::can_int_fit_value<T>(get<std::uint32_t>(v));
+      if (is<std::uint64_t>(v)) return detail::can_int_fit_value<T>(get<std::uint64_t>(v));
+      if (is<float>(v))
+      {
+        float tmp = get<float>(v);
+        return std::floor(tmp) == tmp && float(std::numeric_limits<T>::max()) >= tmp && float(std::numeric_limits<T>::min()) <= tmp;
+      }
+      if (is<double>(v))
+      {
+        double tmp = get<double>(v);
+        return std::floor(tmp) == tmp && double(std::numeric_limits<T>::max()) >= tmp && double(std::numeric_limits<T>::min()) <= tmp;
+      }
+    }
+    else if (std::is_same<T, double>::value)
+    {
+      return true;
+    }
+    else if (std::is_same<T, float>::value)
+    {
+      if (!is<double>(v))
+        return true;
+      else
+      {
+        float tmp = float(get<double>(v));
+        if (double(tmp) == get<double>(v))
+          return true;
+      }
+    }
+    return is<T>(v);
+  }
+
+  template <typename T>
+  bool convert(const any& v, T& dest)
+  {
+    if (can_be<T>(v))
+    {
+      if (is<std::int8_t>(v))        dest = T(get<std::int8_t>(v));
+      else if (is<std::int16_t>(v))  dest = T(get<std::int16_t>(v));
+      else if (is<std::int32_t>(v))  dest = T(get<std::int32_t>(v));
+      else if (is<std::int64_t>(v))  dest = T(get<std::int64_t>(v));
+      else if (is<std::uint8_t>(v))  dest = T(get<std::uint8_t>(v));
+      else if (is<std::uint16_t>(v)) dest = T(get<std::uint16_t>(v));
+      else if (is<std::uint32_t>(v)) dest = T(get<std::uint32_t>(v));
+      else if (is<std::uint64_t>(v)) dest = T(get<std::uint64_t>(v));
+      else if (is<float>(v))         dest = T(get<float>(v));
+      else if (is<double>(v))        dest = T(get<double>(v));
+      return true;
+    }
+    return false;
+  }
 
 //#else
 //  typedef variant any;
