@@ -99,6 +99,18 @@ bool run_json_example()
     return false;
   }
 
+  if (form_data.first_name != "John"
+    || form_data.last_name != "Smith"
+    || form_data.age != 23
+    || form_data.gpa - 4.0f > std::numeric_limits<float>::epsilon()
+    || form_data.email != "john.smith@example.com"
+    || form_data.password_hash != "5f4dcc3b5aa765d61d8327deb882cf99"
+    || !form_data.subscribe_to_email_marketing)
+  {
+    std::cerr << "JSON FAILED!" << std::endl;
+    return false;
+  }
+
   std::cout << "JSON passed." << std::endl;
   return true;
 }
