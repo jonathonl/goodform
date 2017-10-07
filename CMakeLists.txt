@@ -31,6 +31,7 @@ add_executable(goodform-test src/test.cpp)
 target_include_directories(goodform-test PUBLIC include)
 target_link_libraries(goodform-test goodform)
 
+add_test(example_test goodform-test example)
 add_test(simple_test goodform-test simple)
 
 install(DIRECTORY include/goodform DESTINATION include)
