@@ -1,4 +1,4 @@
-#include "form.hpp"
+#include "goodform/form.hpp"
 //######################################################################//
 namespace goodform
 {
@@ -14,7 +14,6 @@ namespace goodform
     return this->value_;
   }
   //======================================================================//
-
 
   //======================================================================//
   string_validator::string_validator(const std::string& value, error_message& errorMessage) : value_(value), error_(errorMessage)
@@ -38,7 +37,7 @@ namespace goodform
   //======================================================================//
 
   //======================================================================//
-  array_validator::array_validator(const std::vector<variant>& value, error_message& errorMessage) : value_(value), error_(errorMessage)
+  array_validator::array_validator(const std::vector<any>& value, error_message& errorMessage) : value_(value), error_(errorMessage)
   {
 
   }
@@ -53,14 +52,14 @@ namespace goodform
     }
     else
     {
-      sub_form ret(variant().get<std::nullptr_t>(), this->error_);
+      sub_form ret(nullptr, this->error_);
       if (this->error_.empty())
         this->error_ = error_message("INDEX (" + std::to_string(index) + ") OUT OF RANGE");
       return ret;
     }
   }
 
-  sub_form array_validator::at(size_t index, const variant& default_variant)
+  sub_form array_validator::at(size_t index, const any& default_variant)
   {
     sub_form ret(this->value_.size() > index ? this->value_[index] : default_variant, this->error_);
     return ret;
@@ -75,14 +74,14 @@ namespace goodform
     }
   }
 
-  const std::vector<variant>& array_validator::val() const
+  const std::vector<any>& array_validator::val() const
   {
     return this->value_;
   }
   //======================================================================//
 
   //======================================================================//
-  object_validator::object_validator(const std::map<std::string,variant>& value, error_message& errorMessage) : value_(value), error_(errorMessage)
+  object_validator::object_validator(const std::map<std::string,any>& value, error_message& errorMessage) : value_(value), error_(errorMessage)
   {
 
   }
@@ -97,50 +96,58 @@ namespace goodform
     }
     else
     {
-      sub_form ret(variant().get<std::nullptr_t>(), this->error_);
+      sub_form ret(nullptr, this->error_);
       if (this->error_.empty())
         this->error_ = error_message("KEY (" + key + ") DOES NOT EXIST");
       return ret;
     }
   }
 
-  sub_form object_validator::at(const std::string& key, const variant& default_variant)
+  sub_form object_validator::at(const std::string& key, const any& default_variant)
   {
     auto it = this->value_.find(key);
     sub_form ret(it != this->value_.end() ? it->second : default_variant, this->error_);
     return ret;
   }
 
-  const std::map<std::string,variant>& object_validator::val() const
+  const std::map<std::string, any>& object_validator::val() const
   {
     return this->value_;
   }
   //======================================================================//
 
   //======================================================================//
-  sub_form::sub_form(const variant& v, error_message& err_msg) : variant_(v), error_(err_msg)
+  const std::string sub_form::const_string;
+  const array_t sub_form::const_array;
+  const object_t sub_form::const_object;
+
+  sub_form::sub_form(const any& v, error_message& err_msg) :
+    variant_(v),
+    error_(err_msg)
   {
 
   }
 
 
-  sub_form::sub_form(const sub_form& source) : variant_(source.variant_), error_(source.error_)
-  {
+//  sub_form::sub_form(const sub_form& source) :
+//    variant_(source.variant_),
+//    error_(source.error_)
+//  {
+//
+//  }
 
-  }
-  
   boolean_validator sub_form::boolean()
   {
-    if (!this->variant_.is<bool>())
+    if (!is<bool>(this->variant_))
       this->error_ = error_message("TYPE NOT BOOLEAN");
 
-    boolean_validator ret(this->variant_.get<bool>());
+    boolean_validator ret(get<bool>(is<bool>(this->variant_) ? this->variant_ : false));
     return ret;
   }
-  
+
   boolean_validator sub_form::boolean(bool default_value)
   {
-    boolean_validator ret(this->variant_.is<bool>() ? this->variant_.get<bool>() : default_value);
+    boolean_validator ret(is<bool>(this->variant_) ? get<bool>(this->variant_) : default_value);
     return ret;
   }
 
@@ -190,7 +197,7 @@ namespace goodform
   number_validator<std::int8_t> sub_form::int8()
   {
     std::int8_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int8_t");
     return number_validator<std::int8_t>(val, this->error_);
   }
@@ -198,7 +205,7 @@ namespace goodform
   number_validator<std::int8_t> sub_form::int8(std::int8_t default_value)
   {
     std::int8_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::int8_t>(val, this->error_);
     else
       return number_validator<std::int8_t>(default_value, this->error_);
@@ -207,7 +214,7 @@ namespace goodform
   number_validator<std::int16_t> sub_form::int16()
   {
     std::int16_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int16_t");
     return number_validator<std::int16_t>(val, this->error_);
   }
@@ -215,7 +222,7 @@ namespace goodform
   number_validator<std::int16_t> sub_form::int16(std::int16_t default_value)
   {
     std::int16_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::int16_t>(val, this->error_);
     else
       return number_validator<std::int16_t>(default_value, this->error_);
@@ -224,7 +231,7 @@ namespace goodform
   number_validator<std::int32_t> sub_form::int32()
   {
     std::int32_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int32_t");
     return number_validator<std::int32_t>(val, this->error_);
   }
@@ -232,7 +239,7 @@ namespace goodform
   number_validator<std::int32_t> sub_form::int32(std::int32_t default_value)
   {
     std::int8_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::int32_t>(val, this->error_);
     else
       return number_validator<std::int32_t>(default_value, this->error_);
@@ -241,7 +248,7 @@ namespace goodform
   number_validator<std::int64_t> sub_form::int64()
   {
     std::int64_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A int64_t");
     return number_validator<std::int64_t>(val, this->error_);
   }
@@ -249,7 +256,7 @@ namespace goodform
   number_validator<std::int64_t> sub_form::int64(std::int64_t default_value)
   {
     std::int64_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::int64_t>(val, this->error_);
     else
       return number_validator<std::int64_t>(default_value, this->error_);
@@ -258,7 +265,7 @@ namespace goodform
   number_validator<std::uint8_t> sub_form::uint8()
   {
     std::uint8_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint8_t");
     return number_validator<std::uint8_t>(val, this->error_);
   }
@@ -266,7 +273,7 @@ namespace goodform
   number_validator<std::uint8_t> sub_form::uint8(std::uint8_t default_value)
   {
     std::uint8_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint8_t>(val, this->error_);
     else
       return number_validator<std::uint8_t>(default_value, this->error_);
@@ -275,7 +282,7 @@ namespace goodform
   number_validator<std::uint16_t> sub_form::uint16()
   {
     std::uint16_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint16_t");
     return number_validator<std::uint16_t>(val, this->error_);
   }
@@ -283,7 +290,7 @@ namespace goodform
   number_validator<std::uint16_t> sub_form::uint16(std::uint16_t default_value)
   {
     std::uint16_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint16_t>(val, this->error_);
     else
       return number_validator<std::uint16_t>(default_value, this->error_);
@@ -292,7 +299,7 @@ namespace goodform
   number_validator<std::uint32_t> sub_form::uint32()
   {
     std::uint32_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint32_t");
     return number_validator<std::uint32_t>(val, this->error_);
   }
@@ -300,7 +307,7 @@ namespace goodform
   number_validator<std::uint32_t> sub_form::uint32(std::uint32_t default_value)
   {
     std::uint32_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint32_t>(val, this->error_);
     else
       return number_validator<std::uint32_t>(default_value, this->error_);
@@ -309,7 +316,7 @@ namespace goodform
   number_validator<std::uint64_t> sub_form::uint64()
   {
     std::uint64_t val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A uint64_t");
     return number_validator<std::uint64_t>(val, this->error_);
   }
@@ -317,7 +324,7 @@ namespace goodform
   number_validator<std::uint64_t> sub_form::uint64(std::uint64_t default_value)
   {
     std::uint64_t val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<std::uint64_t>(val, this->error_);
     else
       return number_validator<std::uint64_t>(default_value, this->error_);
@@ -326,7 +333,7 @@ namespace goodform
   number_validator<float> sub_form::float32()
   {
     float val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A float32");
     return number_validator<float>(val, this->error_);
   }
@@ -334,7 +341,7 @@ namespace goodform
   number_validator<float> sub_form::float32(float default_value)
   {
     float val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<float>(val, this->error_);
     else
       return number_validator<float>(default_value, this->error_);
@@ -343,7 +350,7 @@ namespace goodform
   number_validator<double> sub_form::float64()
   {
     double val;
-    if (!this->variant_.get(val))
+    if (!convert(this->variant_, val))
       this->error_ = error_message("NOT A float64");
     return number_validator<double>(val, this->error_);
   }
@@ -351,7 +358,7 @@ namespace goodform
   number_validator<double> sub_form::float64(double default_value)
   {
     double val;
-    if (this->variant_.get(val))
+    if (convert(this->variant_, val))
       return number_validator<double>(val, this->error_);
     else
       return number_validator<double>(default_value, this->error_);
@@ -424,44 +431,59 @@ namespace goodform
 
   string_validator sub_form::string()
   {
-    if (!this->variant_.is<std::string>())
+    if (!is<std::string>(this->variant_))
+    {
       this->error_ = error_message("TYPE NOT STRING");
-
-    string_validator ret(this->variant_.get<std::string>(), this->error_);
-    return ret;
+      return string_validator(const_string, this->error_);
+    }
+    else
+    {
+      return string_validator(get<std::string>(this->variant_), this->error_);
+    }
   }
 
   string_validator sub_form::string(const std::string& default_value)
   {
-    string_validator ret(this->variant_.is<std::string>() ? this->variant_.get<std::string>() : default_value, this->error_);
+    string_validator ret(is<std::string>(this->variant_) ? get<std::string>(this->variant_) : default_value, this->error_);
     return ret;
   }
 
   array_validator sub_form::array()
   {
-    array_validator ret(this->variant_.get<goodform::array>(), this->error_);
-    if (!this->variant_.is<goodform::array>())
+
+    if (!is<goodform::array_t>(this->variant_))
+    {
       this->error_ = error_message("NOT AN ARRAY");
-    return ret;
+      return array_validator(const_array, this->error_);
+    }
+    else
+    {
+      return array_validator(get<goodform::array_t>(this->variant_), this->error_);
+    }
   }
 
-  array_validator sub_form::array(const std::vector<variant>& default_value)
+  array_validator sub_form::array(const std::vector<any>& default_value)
   {
-    array_validator ret(this->variant_.is<goodform::array>() ? this->variant_.get<goodform::array>() : default_value, this->error_);
+    array_validator ret(is<goodform::array_t>(this->variant_) ? get<goodform::array_t>(this->variant_) : default_value, this->error_);
     return ret;
   }
 
   object_validator sub_form::object()
   {
-    object_validator ret(this->variant_.get<goodform::object>(), this->error_);
-    if (!this->variant_.is<goodform::object>())
+    if (!is<goodform::object_t>(this->variant_))
+    {
       this->error_ = error_message("NOT AN OBJECT");
-    return ret;
+      return object_validator(get<goodform::object_t>(const_object), this->error_);
+    }
+    else
+    {
+      return object_validator(get<goodform::object_t>(this->variant_), this->error_);
+    }
   }
 
-  object_validator sub_form::object(const std::map<std::string,variant>& default_value)
+  object_validator sub_form::object(const std::map<std::string,any>& default_value)
   {
-    object_validator ret(this->variant_.is<goodform::object>() ? this->variant_.get<goodform::object>() : default_value, this->error_);
+    object_validator ret(is<goodform::object_t>(this->variant_) ? get<goodform::object_t>(this->variant_) : default_value, this->error_);
     return ret;
   }
 
@@ -470,9 +492,9 @@ namespace goodform
     return this->array().at(index);
   }
 
-  sub_form sub_form::at(size_t index, const variant& default_variant)
+  sub_form sub_form::at(size_t index, const any& default_variant)
   {
-    return this->array(std::vector<variant>()).at(index, default_variant);
+    return this->array(std::vector<any>()).at(index, default_variant);
   }
 
   void sub_form::for_each(const std::function<void(sub_form& element, size_t index)>& fn)
@@ -485,14 +507,14 @@ namespace goodform
     return this->object().at(key);
   }
 
-  sub_form sub_form::at(const std::string& key, const variant& default_variant)
+  sub_form sub_form::at(const std::string& key, const any& default_variant)
   {
-    return this->object(std::map<std::string,variant>()).at(key, default_variant);
+    return this->object(std::map<std::string, any>()).at(key, default_variant);
   }
   //======================================================================//
 
   //======================================================================//
-  form::form(const variant& v) : error_(""), sub_form(v, error_)
+  form::form(const any& v) : error_(""), sub_form(v, error_)
   {
 
   }
@@ -502,5 +524,5 @@ namespace goodform
     return this->error_.empty();
   }
   //======================================================================//
-}  //namespace goodform
+}
 //######################################################################//

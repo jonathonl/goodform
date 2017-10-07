@@ -1,9 +1,11 @@
 
-#include "variant.hpp"
+#include "goodform/variant.hpp"
 
 #include <assert.h>
 
 //######################################################################//
+//#if !__has_include("any")
+#if 0
 namespace goodform
 {
   //----------------------------------------------------------------------//
@@ -15,9 +17,9 @@ namespace goodform
   const std::uint64_t const_uint64 = 0;
   const double const_double = 0.0;
   const std::string const_string;
-  const binary const_binary;
-  const array const_array;
-  const object const_object;
+  const binary_t const_binary;
+  const array_t const_array;
+  const object_t const_object;
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
@@ -70,11 +72,11 @@ namespace goodform
     else if (this->type_ == variant_type::string)
       new(&this->data_.string_) std::string(std::move(source.data_.string_));
     else if (this->type_ == variant_type::binary)
-      new(&this->data_.binary_) binary(std::move(source.data_.binary_));
+      new(&this->data_.binary_) binary_t(std::move(source.data_.binary_));
     else if (this->type_ == variant_type::array)
-      new(&this->data_.array_) array(std::move(source.data_.array_));
+      new(&this->data_.array_) array_t(std::move(source.data_.array_));
     else if (this->type_ == variant_type::object)
-      new(&this->data_.object_) object(std::move(source.data_.object_));
+      new(&this->data_.object_) object_t(std::move(source.data_.object_));
   }
   //----------------------------------------------------------------------//
 
@@ -114,11 +116,11 @@ namespace goodform
     else if (this->type_ == variant_type::string)
       new(&this->data_.string_) std::string(source.data_.string_);
     else if (this->type_ == variant_type::binary)
-      new(&this->data_.binary_) binary(source.data_.binary_);
+      new(&this->data_.binary_) binary_t(source.data_.binary_);
     else if (this->type_ == variant_type::array)
-      new(&this->data_.array_) array(source.data_.array_);
+      new(&this->data_.array_) array_t(source.data_.array_);
     else if (this->type_ == variant_type::object)
-      new(&this->data_.object_) object(source.data_.object_);
+      new(&this->data_.object_) object_t(source.data_.object_);
   }
   //----------------------------------------------------------------------//
 
@@ -287,26 +289,26 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(goodform::binary&& value)
+  variant::variant(goodform::binary_t&& value)
   {
     this->type_ = variant_type::binary;
-    new (&this->data_.binary_) binary(std::move(value));
+    new (&this->data_.binary_) binary_t(std::move(value));
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(goodform::array&& value)
+  variant::variant(goodform::array_t&& value)
   {
     this->type_ = variant_type::array;
-    new (&this->data_.array_) array(std::move(value));
+    new (&this->data_.array_) array_t(std::move(value));
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(goodform::object&& value)
+  variant::variant(goodform::object_t&& value)
   {
     this->type_ = variant_type::object;
-    new(&this->data_.object_) object(std::move(value));
+    new(&this->data_.object_) object_t(std::move(value));
   }
   //----------------------------------------------------------------------//
 
@@ -319,26 +321,26 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(const binary& value)
+  variant::variant(const binary_t& value)
   {
     this->type_ = variant_type::binary;
-    new (&this->data_.binary_) binary(value);
+    new (&this->data_.binary_) binary_t(value);
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(const array& value)
+  variant::variant(const array_t& value)
   {
     this->type_ = variant_type::array;
-    new (&this->data_.array_) array(value);
+    new (&this->data_.array_) array_t(value);
   }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant::variant(const object& value)
+  variant::variant(const object_t& value)
   {
     this->type_ = variant_type::object;
-    new(&this->data_.object_) object(value);
+    new(&this->data_.object_) object_t(value);
   }
   //----------------------------------------------------------------------//
 
@@ -349,11 +351,11 @@ namespace goodform
     if (this->type_ == variant_type::string)
       new (&this->data_.string_) std::string();
     else if (this->type_ == variant_type::binary)
-      new (&this->data_.binary_) goodform::binary();
+      new (&this->data_.binary_) goodform::binary_t();
     else if (this->type_ == variant_type::array)
-      new (&this->data_.array_) goodform::array();
+      new (&this->data_.array_) goodform::array_t();
     else if (this->type_ == variant_type::object)
-      new (&this->data_.object_) goodform::object();
+      new (&this->data_.object_) goodform::object_t();
   }
   //----------------------------------------------------------------------//
 
@@ -471,7 +473,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(goodform::binary&& value)
+  variant& variant::operator=(goodform::binary_t&& value)
   {
     operator=(variant(std::move(value)));
     return *this;
@@ -479,7 +481,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(goodform::array&& value)
+  variant& variant::operator=(goodform::array_t&& value)
   {
     operator=(variant(std::move(value)));
     return *this;
@@ -487,7 +489,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(goodform::object&& value)
+  variant& variant::operator=(goodform::object_t&& value)
   {
     operator=(variant(std::move(value)));
     return *this;
@@ -503,7 +505,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(const binary& value)
+  variant& variant::operator=(const binary_t& value)
   {
     operator=(variant(value));
     return *this;
@@ -511,7 +513,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(const array& value)
+  variant& variant::operator=(const array_t& value)
   {
     operator=(variant(value));
     return *this;
@@ -519,7 +521,7 @@ namespace goodform
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
-  variant& variant::operator=(const object& value)
+  variant& variant::operator=(const object_t& value)
   {
     operator=(variant(value));
     return *this;
@@ -550,11 +552,11 @@ namespace goodform
       if (type == variant_type::string)
         new (&this->data_.string_) std::string();
       else if (type == variant_type::binary)
-        new (&this->data_.binary_) goodform::binary();
+        new (&this->data_.binary_) goodform::binary_t();
       else if (type == variant_type::array)
-        new (&this->data_.array_) goodform::array();
+        new (&this->data_.array_) goodform::array_t();
       else if (type == variant_type::object)
-        new (&this->data_.object_) goodform::object();
+        new (&this->data_.object_) goodform::object_t();
       this->type_ = type;
     }
   }
@@ -574,11 +576,11 @@ namespace goodform
   template<>
   bool variant::is<std::string>() const { return (this->type_ == variant_type::string); }
   template<>
-  bool variant::is<goodform::binary>() const { return (this->type_ == variant_type::binary); }
+  bool variant::is<goodform::binary_t>() const { return (this->type_ == variant_type::binary); }
   template<>
-  bool variant::is<goodform::array>() const { return (this->type_ == variant_type::array); }
+  bool variant::is<goodform::array_t>() const { return (this->type_ == variant_type::array); }
   template<>
-  bool variant::is<goodform::object>() const { return (this->type_ == variant_type::object);  }
+  bool variant::is<goodform::object_t>() const { return (this->type_ == variant_type::object);  }
   //----------------------------------------------------------------------//
 
   //----------------------------------------------------------------------//
@@ -635,17 +637,17 @@ namespace goodform
     return (this->type_ == variant_type::string ? this->data_.string_ : const_string);
   }
   template<>
-  const goodform::binary& variant::get<goodform::binary>() const
+  const goodform::binary_t& variant::get<goodform::binary_t>() const
   {
     return (this->type_ == variant_type::binary ? this->data_.binary_ : const_binary);
   }
   template<>
-  const goodform::array& variant::get<goodform::array>() const
+  const goodform::array_t& variant::get<goodform::array_t>() const
   {
     return (this->type_ == variant_type::array ? this->data_.array_ : const_array);
   }
   template<>
-  const goodform::object& variant::get<goodform::object>() const
+  const goodform::object_t& variant::get<goodform::object_t>() const
   {
     return (this->type_ == variant_type::object ? this->data_.object_ : const_object);
   }
@@ -735,7 +737,7 @@ namespace goodform
   }
 
   template<>
-  bool variant::get(goodform::binary& dest) const
+  bool variant::get(goodform::binary_t& dest) const
   {
     bool ret = (this->type_ == variant_type::binary);
     if (ret)
@@ -744,7 +746,7 @@ namespace goodform
   }
 
   template<>
-  bool variant::get(goodform::array& dest) const
+  bool variant::get(goodform::array_t& dest) const
   {
     bool ret = (this->type_ == variant_type::array);
     if (ret)
@@ -753,7 +755,7 @@ namespace goodform
   }
 
   template<>
-  bool variant::get(goodform::object& dest) const
+  bool variant::get(goodform::object_t& dest) const
   {
     bool ret = (this->type_ == variant_type::object);
     if (ret)
@@ -769,7 +771,7 @@ namespace goodform
     {
       this->destroy();
       this->type_ = variant_type::array;
-      new (&this->data_.array_) goodform::array();
+      new (&this->data_.array_) goodform::array_t();
     }
     while (index >= this->data_.array_.size())
       this->data_.array_.push_back(variant());
@@ -784,7 +786,7 @@ namespace goodform
     {
       this->destroy();
       this->type_ = variant_type::object;
-      new (&this->data_.object_) goodform::object();
+      new (&this->data_.object_) goodform::object_t();
     }
     return this->data_.object_[index];
   }
@@ -839,7 +841,7 @@ namespace goodform
     {
       this->destroy();
       this->type_ = variant_type::array;
-      new (&this->data_.array_) goodform::array();
+      new (&this->data_.array_) goodform::array_t();
     }
     this->data_.array_.push_back(value);
   }
@@ -852,7 +854,7 @@ namespace goodform
     {
       this->destroy();
       this->type_ = variant_type::array;
-      new (&this->data_.array_) goodform::array();
+      new (&this->data_.array_) goodform::array_t();
     }
     this->data_.array_.push_back(std::move(value));
   }
@@ -895,25 +897,26 @@ namespace goodform
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
-  variant::operator const goodform::binary&() const
+  variant::operator const goodform::binary_t&() const
   {
-    return this->get<binary>();
+    return this->get<binary_t>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
-  variant::operator const goodform::array&() const
+  variant::operator const goodform::array_t&() const
   {
-    return this->get<array>();
+    return this->get<array_t>();
   }
   //---------------------------------------------------------------------//
 
   //---------------------------------------------------------------------//
-  variant::operator const goodform::object&() const
+  variant::operator const goodform::object_t&() const
   {
-    return this->get<object>();
+    return this->get<object_t>();
   }
   //----------------------------------------------------------------------//
 #endif
 }
+#endif
 //######################################################################//

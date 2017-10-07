@@ -30,8 +30,8 @@ namespace goodform
     //static bool deserializeobject();
 
   public:
-    static bool serialize(const variant& v, std::ostream& output);
-    static bool deserialize(std::istream& input, variant& v);
+    static bool serialize(const any& v, std::ostream& output);
+    static bool deserialize(std::istream& input, any& v);
   };
 }
 

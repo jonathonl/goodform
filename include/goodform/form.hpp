@@ -116,9 +116,9 @@ namespace goodform
   {
   private:
     error_message& error_;
-    const std::vector<variant>& value_;
+    const std::vector<any>& value_;
   public:
-    array_validator(const std::vector<variant>& value, error_message& error_message);
+    array_validator(const std::vector<any>& value, error_message& error_message);
 
     /**
      * Retrieves variant at array index or sets error if index does not exist.
@@ -135,7 +135,7 @@ namespace goodform
      * @param default_variant Variant to use if index does not exist.
      * @return Returns sub_form object for further validation.
      */
-    sub_form at(size_t index, const variant& default_variant);
+    sub_form at(size_t index, const any& default_variant);
 
     /**
      * Iterates elements in array.
@@ -147,7 +147,7 @@ namespace goodform
     /**
      * @return Returns array value.
      */
-    const std::vector<variant>& val() const;
+    const std::vector<any>& val() const;
   };
   //======================================================================//
 
@@ -156,9 +156,9 @@ namespace goodform
   {
   private:
     error_message& error_;
-    const std::map<std::string, variant>& value_;
+    const std::map<std::string, any>& value_;
   public:
-    object_validator(const std::map<std::string, variant>& value, error_message& error_message);
+    object_validator(const std::map<std::string, any>& value, error_message& error_message);
 
     /**
      * Retrieves variant at key or sets error if key does not exist.
@@ -175,12 +175,12 @@ namespace goodform
      * @param default_variant Variant to use if key does not exist.
      * @return Returns sub_form object for further validation.
      */
-    sub_form at(const std::string& key, const variant& default_variant);
+    sub_form at(const std::string& key, const any& default_variant);
 
     /**
      * @return Returns object value.
      */
-    const std::map<std::string, variant>& val() const;
+    const std::map<std::string, any>& val() const;
   };
   //======================================================================//
 
@@ -188,13 +188,17 @@ namespace goodform
   class sub_form
   {
   private:
+    static const std::string const_string;
+    static const array_t const_array;
+    static const object_t const_object;
+
     error_message& error_;
     //static double convert_to_double(const variant& v);
   protected:
-    const variant& variant_;
+    const any& variant_;
   public:
-    sub_form(const variant& v, error_message& error_message);
-    sub_form(const sub_form& source);
+    sub_form(const any& v, error_message& error_message);
+    //sub_form(const sub_form& source);
 
     /**
      * Verifies that the current variant has a boolean value and otherwise sets an error.
@@ -389,7 +393,7 @@ namespace goodform
      * @param default_value The value to use if validation fails.
      * @return An array_validator object is returned for further validation of the value.
      */
-    array_validator array(const std::vector<variant>& default_value);
+    array_validator array(const std::vector<any>& default_value);
 
     /**
      * Verifies that the current variant has a key-value map value and otherwise sets an error.
@@ -404,7 +408,7 @@ namespace goodform
      * @param default_value The value to use if validation fails.
      * @return An object_validator object is returned for further validation of the value.
      */
-    object_validator object(const std::map<std::string, variant>& default_value);
+    object_validator object(const std::map<std::string, any>& default_value);
 
 
     /**
@@ -422,7 +426,7 @@ namespace goodform
      * @param default_variant The variant to use if validation fails.
      * @return A sub_form object is returned representing the variant at the index passed.
      */
-    sub_form at(size_t index, const variant& default_variant);
+    sub_form at(size_t index, const any& default_variant);
 
     /**
      * Shortcut method for array_validator::for_each. An error is set if the current variant is not an array or the index does not exist.
@@ -446,7 +450,7 @@ namespace goodform
      * @param default_variant The variant to use if validation fails.
      * @return A sub_form object is returned representing the variant at the key passed.
      */
-    sub_form at(const std::string& key, const variant& default_variant);
+    sub_form at(const std::string& key, const any& default_variant);
   };
   //======================================================================//
 
@@ -456,7 +460,7 @@ namespace goodform
   private:
     error_message error_;
   public:
-    form(const variant& v);
+    form(const any& v);
     bool is_good() const;
   };
   //======================================================================//
