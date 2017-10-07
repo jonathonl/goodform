@@ -4,10 +4,10 @@ project(goodform)
 include_directories("./include")
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/lib)
-set(CMAKE_CXX_STANDARD 17)
 
-set(CMAKE_CXX_COMPILER "/opt/local/bin/g++-mp-7")
-set(CMAKE_CC_COMPILER "/opt/local/bin/gcc-mp-7")
+#set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_COMPILER "/opt/local/bin/g++-mp-7")
+#set(CMAKE_CC_COMPILER "/opt/local/bin/gcc-mp-7")
 
 set(HEADER_FILES
   include/form.hpp
@@ -24,6 +24,7 @@ set(SOURCE_FILES
   src/form.cpp)
 
 add_library(goodform ${SOURCE_FILES} ${HEADER_FILES})
+target_compile_features(goodform PUBLIC cxx_auto_type cxx_lambdas)
 
-add_executable(variant-test tests/variant-test.cpp)
+add_executable(variant-test src/test.cpp)
 target_link_libraries(variant-test goodform)

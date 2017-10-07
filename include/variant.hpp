@@ -10,6 +10,8 @@
 
 #if __has_include("any")
 #include <any>
+#else
+#include <boost/any.hpp>
 #endif
 
 
@@ -25,16 +27,17 @@
 namespace goodform
 {
   //----------------------------------------------------------------------//
-#if !__has_include("any")
-  class any;
-#else
+#if __has_include("any")
   typedef std::any any;
+#else
+  typedef boost::any any;
 #endif
   typedef std::vector<char> binary_t;
   typedef std::map<std::string, any> object_t;
   typedef std::vector<any> array_t;
   //----------------------------------------------------------------------//
-#if !__has_include("any")
+//#if !__has_include("any")
+#if 0
   //----------------------------------------------------------------------//
   enum class variant_type
   {
@@ -227,11 +230,7 @@ namespace goodform
   template <typename T>
   bool is(const any& v)
   {
-#if __has_include("any")
     return v.type() == typeid(T);
-#else
-    return v.is<T>();
-#endif
   }
 
   template <typename T>
@@ -240,7 +239,7 @@ namespace goodform
 #if __has_include("any")
     return std::any_cast<const T&>(v);
 #else
-    return v.get<T>();
+    return boost::any_cast<const T&>(v);
 #endif
   }
 
@@ -250,7 +249,7 @@ namespace goodform
 #if __has_include("any")
     return std::any_cast<T&>(v);
 #else
-    return v.get<T>();
+    return boost::any_cast<T&>(v);
 #endif
   }
 
