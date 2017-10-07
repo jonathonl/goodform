@@ -3,6 +3,8 @@ include(ExternalProject)
 include(CMakePackageConfigHelpers)
 project(goodform VERSION 1.0.0)
 
+enable_testing()
+
 #set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_CXX_COMPILER "/opt/local/bin/g++-mp-7")
 #set(CMAKE_CC_COMPILER "/opt/local/bin/gcc-mp-7")
@@ -28,6 +30,8 @@ target_compile_features(goodform PUBLIC cxx_auto_type cxx_lambdas)
 add_executable(goodform-test src/test.cpp)
 target_include_directories(goodform-test PUBLIC include)
 target_link_libraries(goodform-test goodform)
+
+add_test(simple_test goodform-test simple)
 
 install(DIRECTORY include/goodform DESTINATION include)
 install(TARGETS goodform EXPORT ${PROJECT_NAME}-config
