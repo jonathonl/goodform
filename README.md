@@ -4,7 +4,7 @@ Form validation library. Includes MsgPack and JSON serializer/deserializer.
 ## Building
 GoodForm uses std::any, which requires c++17. When c++17 is not available, boost::any is expected and will be installed automatically when using [cget](http://cget.readthedocs.io/en/latest/src/intro.html#installing-cget).
 
-```shell
+```bash
 cd goodform
 cget install -f ./requirements.txt                      # Install dependencies locally.
 mkdir build && cd build                                 # Create out of source build directory.
@@ -15,7 +15,7 @@ make
 ## MsgPack Usage
 ```c++
 std::stringstream ss;
-goodform::variant var, var2;
+goodform::any var, var2;
 var = goodform::object
   {
     {"compact", true},
@@ -44,7 +44,7 @@ if (form.is_good())
 
 ## JSON Usage
 ```c++
-goodform::variant var;
+goodform::any var;
 std::stringstream ss;
 ss << "{" << std::endl
   << "\"first_name\":\"John\", // This is a comment" << std::endl
