@@ -3,7 +3,7 @@
 #include <locale>
 #include <codecvt>
 
-#include "json.hpp"
+#include "goodform/json.hpp"
 
 //######################################################################//
 namespace goodform
