@@ -1,1 +1,9 @@
-boostorg/any --cmake header
+boostorg/preprocessor@boost-1.59.0 --cmake header
+boostorg/config@boost-1.59.0 --cmake header
+boostorg/core@boost-1.59.0 --cmake header
+boostorg/mpl@boost-1.59.0 --cmake header
+boostorg/static_assert@boost-1.59.0 --cmake header
+boostorg/throw_exception@boost-1.59.0 --cmake header
+boostorg/type_index@boost-1.59.0 --cmake header
+boostorg/type_traits@boost-1.59.0 --cmake header
+boostorg/any@boost-1.59.0 --cmake header

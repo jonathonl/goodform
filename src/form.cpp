@@ -141,7 +141,7 @@ namespace goodform
     if (!is<bool>(this->variant_))
       this->error_ = error_message("TYPE NOT BOOLEAN");
 
-    boolean_validator ret(get<bool>(is<bool>(this->variant_) ? this->variant_ : false));
+    boolean_validator ret(is<bool>(this->variant_) ? get<bool>(this->variant_) : false);
     return ret;
   }
 
@@ -473,7 +473,7 @@ namespace goodform
     if (!is<goodform::object_t>(this->variant_))
     {
       this->error_ = error_message("NOT AN OBJECT");
-      return object_validator(get<goodform::object_t>(const_object), this->error_);
+      return object_validator(const_object, this->error_);
     }
     else
     {

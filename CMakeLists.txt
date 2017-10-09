@@ -5,6 +5,8 @@ project(goodform VERSION 1.0.0)
 
 enable_testing()
 
+add_definitions(-DBOOST_DISABLE_CURRENT_FUNCTION -DBOOST_THROW_EXCEPTION_CURRENT_FUNCTION)
+
 #set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_CXX_COMPILER "/opt/local/bin/g++-mp-7")
 #set(CMAKE_CC_COMPILER "/opt/local/bin/gcc-mp-7")
