@@ -8,7 +8,7 @@
 #include <limits>
 #include <cmath>
 
-#if __has_include("any")
+#if __has_include("any") && __cplusplus >= 201703L
 #include <any>
 #else
 #include <boost/any.hpp>
@@ -27,7 +27,7 @@
 namespace goodform
 {
   //----------------------------------------------------------------------//
-#if __has_include("any")
+#if __has_include("any") && __cplusplus >= 201703L
   typedef std::any any;
 #else
   typedef boost::any any;
@@ -236,7 +236,7 @@ namespace goodform
   template <typename T>
   const T& get(const any& v)
   {
-#if __has_include("any")
+#if __has_include("any") && __cplusplus >= 201703L
     return std::any_cast<const T&>(v);
 #else
     return boost::any_cast<const T&>(v);
@@ -246,7 +246,7 @@ namespace goodform
   template <typename T>
   T& get(any& v)
   {
-#if __has_include("any")
+#if __has_include("any") && __cplusplus >= 201703L
     return std::any_cast<T&>(v);
 #else
     return boost::any_cast<T&>(v);
